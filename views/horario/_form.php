@@ -100,20 +100,24 @@ $periodos = ArrayHelper::map(Periodo::find()->all(), 'id', 'identificador');
     
     $('#turma').on('change', function (e) {
         var id_turma = $(this).val();
-        getOptions(id_turma, 'get-disciplinas-turma', 'disciplina');
+        getOptions(id_turma, null, 'get-disciplinas-turma', 'disciplina');
+        getOptions(null, null, 'get-dias-da-semana-livres', 'semana');
+        getOptions(null, null, 'get-salas-livres', 'sala');
     });
     
-    $('#disciplina').on('change', function (e) {
-       // var id_disciplina = $(this).val();
-        getOptions(null, 'get-dias-da-semana-livres', 'semana');
+    $('#sala').on('change', function (e) {
+        var id_sala = $(this).val();
+        var id_semana = $('#semana').val();
+        getOptions(id_sala, id_semana, 'get-periodos-livres', 'periodo');
     });
 
-    function getOptions(id, method, id_select) {
+    function getOptions(id1, id2, method, id_select) {
             $.ajax({
                 url: '<?= Yii::$app->request->baseUrl . '/?r=horario/' ?>' + method,
                 type: 'post',
                 data: {
-                    id: id
+                    id1: id1,
+                    id2: id2
                 },
                 success: function (data) {
                     console.log(data);
