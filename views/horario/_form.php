@@ -97,24 +97,30 @@ $periodos = ArrayHelper::map(Periodo::find()->all(), 'id', 'identificador');
 
 
 <script>
-    //rever isto
+    
     $('#turma').on('change', function (e) {
         var id_turma = $(this).val();
-        getOptions(id_turma);
+        getOptions(id_turma, 'get-disciplinas-turma', 'disciplina');
+    });
+    
+    $('#disciplina').on('change', function (e) {
+       // var id_disciplina = $(this).val();
+        getOptions(null, 'get-dias-da-semana-livres', 'semana');
     });
 
-    function getOptions(id) {
+    function getOptions(id, method, id_select) {
             $.ajax({
-                url: '<?= Yii::$app->request->baseUrl . '/?r=horario/get-disciplinas-turma' ?>',
+                url: '<?= Yii::$app->request->baseUrl . '/?r=horario/' ?>' + method,
                 type: 'post',
                 data: {
                     id: id
                 },
                 success: function (data) {
-                    var disciplinas = $.parseJSON(data);
-                    $("#disciplina").empty();
-                    $.each(disciplinas, function(index, value) {
-                        $("#disciplina").append($("<option></option>").attr("value", index).text(value));
+                    console.log(data);
+                    var array = $.parseJSON(data);
+                    $("#"+id_select).empty();
+                    $.each(array, function(index, value) {
+                        $("#"+id_select).append($("<option></option>").attr("value", index).text(value));
                     });
                 },
                 error: function () {

@@ -4,10 +4,11 @@ namespace app\controllers;
 
 use app\models\Disciplina;
 use app\models\Horario;
-use app\models\HorarioSearch;
+use app\models\Semana;
 use app\models\Turma;
 use Yii;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -120,6 +121,32 @@ class HorarioController extends Controller
         }
        
         return json_encode($disciplinas);
+    }
+    
+    //Retorna os dias da semana livres
+    public function actionGetDiasDaSemanaLivres() {
+        #retorna a multiplicação de salas por períodos
+        $salas_periodos = Yii::$app->db->createCommand('SELECT 
+            ((SELECT COUNT(*) FROM cronograma.sala) * (SELECT COUNT(*) FROM cronograma.periodo)) AS total
+        FROM
+            cronograma.sala
+        LIMIT 1') ->queryOne()['total'];
+        
+        $semanas = ArrayHelper::map(Semana::find()->all(), 'id', 'dia');
+        $diasLivres = $semanas;
+        foreach ($semanas as $key => $value) {
+            $qtd_registros = Yii::$app->db->createCommand("SELECT 
+                COUNT(*) AS qtd
+            FROM
+                cronograma.semana_sala_periodo
+            WHERE
+                semana = $key") ->queryOne()['qtd'];
+            if ($salas_periodos == $qtd_registros) {
+                unset($diasLivres[$key]);
+            }
+        }
+        
+        echo "<pre>"; die(var_dump($diasLivres));
     }
 
     /**
