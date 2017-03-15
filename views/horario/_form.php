@@ -9,7 +9,7 @@ use app\models\Turma;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\View;
-use yii\widgets\ActiveForm;
+use yii\widgets\ActiveForm; 
 
 /* @var $this View */
 /* @var $model Horario */
@@ -41,9 +41,9 @@ $periodos = ArrayHelper::map(Periodo::find()->all(), 'id', 'identificador');
         <label class="control-label" for="disciplina">Disciplina</label>
         <select id="disciplina" class="form-control" name="disciplina" aria-required="true" aria-invalid="true">
             <option value="">Selecione...</option>
-            <?php foreach ($disciplinas as $key => $value) { ?>
-                <option value="<?= $key ?>"><?= $value ?></option>
-            <?php } ?>
+            <?php // foreach ($disciplinas as $key => $value) { ?>
+                <!--<option value="<?=''// $key ?>"><?=''// $value ?></option>-->
+            <?php // } ?>
         </select>
     </div>
     
@@ -51,9 +51,9 @@ $periodos = ArrayHelper::map(Periodo::find()->all(), 'id', 'identificador');
         <label class="control-label" for="semana">Dia da Semana</label>
         <select id="semana" class="form-control" name="semana" aria-required="true" aria-invalid="true">
             <option value="">Selecione...</option>
-            <?php foreach ($semanas as $key => $value) { ?>
-                <option value="<?= $key ?>"><?= $value ?></option>
-            <?php } ?>
+            <?php // foreach ($semanas as $key => $value) { ?>
+                <!--<option value="<?= ''//$key ?>"><?= ''//$value ?></option>-->
+            <?php // } ?>
         </select>
     </div>
     
@@ -61,9 +61,9 @@ $periodos = ArrayHelper::map(Periodo::find()->all(), 'id', 'identificador');
         <label class="control-label" for="sala">Sala</label>
         <select id="sala" class="form-control" name="sala" aria-required="true" aria-invalid="true">
             <option value="">Selecione...</option>
-            <?php foreach ($salas as $key => $value) { ?>
-                <option value="<?= $key ?>"><?= $value ?></option>
-            <?php } ?>
+            <?php // foreach ($salas as $key => $value) { ?>
+                <!--<option value="<?= ''//$key ?>"><?= ''//$value ?></option>-->
+            <?php // } ?>
         </select>
     </div>
 
@@ -71,9 +71,9 @@ $periodos = ArrayHelper::map(Periodo::find()->all(), 'id', 'identificador');
         <label class="control-label" for="periodo">Horário</label>
         <select id="periodo" class="form-control" name="periodo" aria-required="true" aria-invalid="true">
             <option value="">Selecione...</option>
-            <?php foreach ($periodos as $key => $value) { ?>
-                <option value="<?= $key ?>"><?= $value ?></option>
-            <?php } ?>
+            <?php // foreach ($periodos as $key => $value) { ?>
+                <!--<option value="<?= ''//$key ?>"><?= ''//$value ?></option>-->
+            <?php // } ?>
         </select>
     </div>
     
@@ -99,14 +99,21 @@ $periodos = ArrayHelper::map(Periodo::find()->all(), 'id', 'identificador');
 <script>
     
     $('#turma').on('change', function (e) {
-        var id_turma = $(this).val();
+        var id_turma = $('#turma').val();
         getOptions(id_turma, null, 'get-disciplinas-turma', 'disciplina');
+    });
+    
+    $('#disciplina').on('change', function (e) {
         getOptions(null, null, 'get-dias-da-semana-livres', 'semana');
-        getOptions(null, null, 'get-salas-livres', 'sala');
+    });
+    
+    $('#semana').on('change', function (e) {
+        var id_semana = $('#semana').val();
+        getOptions(id_semana, null, 'get-salas-livres', 'sala');
     });
     
     $('#sala').on('change', function (e) {
-        var id_sala = $(this).val();
+        var id_sala = $('#sala').val();
         var id_semana = $('#semana').val();
         getOptions(id_sala, id_semana, 'get-periodos-livres', 'periodo');
     });
