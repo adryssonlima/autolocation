@@ -1,0 +1,4 @@
+#ignora os parametros de banco de dados
+
+config/db.php
+
