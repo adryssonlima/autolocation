@@ -9,7 +9,7 @@ use app\models\Turma;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\View;
-use yii\widgets\ActiveForm; 
+use yii\widgets\ActiveForm;
 
 /* @var $this View */
 /* @var $model Horario */
@@ -26,7 +26,7 @@ $periodos = ArrayHelper::map(Periodo::find()->all(), 'id', 'identificador');
 <div class="horario-form">
 
     <?php $form = ActiveForm::begin(); ?>
-    
+
     <div class="form-group field-turma required">
         <label class="control-label" for="turma">Turma</label>
         <select id="turma" class="form-control" name="turma" aria-required="true" aria-invalid="true">
@@ -36,33 +36,33 @@ $periodos = ArrayHelper::map(Periodo::find()->all(), 'id', 'identificador');
             <?php } ?>
         </select>
     </div>
-    
+<!--
     <div class="form-group field-disciplina required">
         <label class="control-label" for="disciplina">Disciplina</label>
         <select id="disciplina" class="form-control" name="disciplina" aria-required="true" aria-invalid="true">
             <option value="">Selecione...</option>
             <?php // foreach ($disciplinas as $key => $value) { ?>
-                <!--<option value="<?=''// $key ?>"><?=''// $value ?></option>-->
+                <option value="<?=''// $key ?>"><?=''// $value ?></option>
             <?php // } ?>
         </select>
     </div>
-    
+
     <div class="form-group field-semana required">
         <label class="control-label" for="semana">Dia da Semana</label>
         <select id="semana" class="form-control" name="semana" aria-required="true" aria-invalid="true">
             <option value="">Selecione...</option>
             <?php // foreach ($semanas as $key => $value) { ?>
-                <!--<option value="<?= ''//$key ?>"><?= ''//$value ?></option>-->
+                <option value="<?= ''//$key ?>"><?= ''//$value ?></option>
             <?php // } ?>
         </select>
     </div>
-    
+
     <div class="form-group field-sala required">
         <label class="control-label" for="sala">Sala</label>
         <select id="sala" class="form-control" name="sala" aria-required="true" aria-invalid="true">
             <option value="">Selecione...</option>
             <?php // foreach ($salas as $key => $value) { ?>
-                <!--<option value="<?= ''//$key ?>"><?= ''//$value ?></option>-->
+                <option value="<?= ''//$key ?>"><?= ''//$value ?></option>
             <?php // } ?>
         </select>
     </div>
@@ -72,11 +72,11 @@ $periodos = ArrayHelper::map(Periodo::find()->all(), 'id', 'identificador');
         <select id="periodo" class="form-control" name="periodo" aria-required="true" aria-invalid="true">
             <option value="">Selecione...</option>
             <?php // foreach ($periodos as $key => $value) { ?>
-                <!--<option value="<?= ''//$key ?>"><?= ''//$value ?></option>-->
+                <option value="<?= ''//$key ?>"><?= ''//$value ?></option>
             <?php // } ?>
         </select>
     </div>
-    
+-->
     <?=''// $form->field($model, 'turma')->dropDownList(ArrayHelper::map(Turma::find()->all(), 'id', 'identificador'), ['prompt' => 'Selecione...']) ?>
 
     <?=''// $form->field($model, 'disciplina')->dropDownList(ArrayHelper::map(Disciplina::find()->all(), 'id', 'nome'), ['prompt' => 'Selecione...']) ?>
@@ -88,7 +88,7 @@ $periodos = ArrayHelper::map(Periodo::find()->all(), 'id', 'identificador');
     <?=''// $form->field($model, 'periodo')->dropDownList(ArrayHelper::map(Periodo::find()->all(), 'id', 'identificador'), ['prompt' => 'Selecione...']) ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Concluir' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
@@ -97,21 +97,21 @@ $periodos = ArrayHelper::map(Periodo::find()->all(), 'id', 'identificador');
 
 
 <script>
-    
+
     $('#turma').on('change', function (e) {
         var id_turma = $('#turma').val();
         getOptions(id_turma, null, 'get-disciplinas-turma', 'disciplina');
     });
-    
+
     $('#disciplina').on('change', function (e) {
         getOptions(null, null, 'get-dias-da-semana-livres', 'semana');
     });
-    
+
     $('#semana').on('change', function (e) {
         var id_semana = $('#semana').val();
         getOptions(id_semana, null, 'get-salas-livres', 'sala');
     });
-    
+
     $('#sala').on('change', function (e) {
         var id_sala = $('#sala').val();
         var id_semana = $('#semana').val();
