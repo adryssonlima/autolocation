@@ -75,6 +75,13 @@ class TurmaController extends Controller
         }
     }
 
+    public function actionNovaTurma() {
+        $data = Yii::$app->request->post();
+        $model = new Turma();
+        
+        echo"<pre>"; die(var_dump($data));
+    }
+
     /**
      * Updates an existing Turma model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -106,7 +113,7 @@ class TurmaController extends Controller
 
         return $this->redirect(['index']);
     }
-    
+
     //Retorna a quantidade de semestres do curso
     public function actionGetQuantidadeSemestres() {
         $id = Yii::$app->request->post()['id'];
