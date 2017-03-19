@@ -97,7 +97,10 @@ use yii\widgets\ActiveForm;
                                     $periodos = ArrayHelper::map(Periodo::find()->all(), 'id', 'intervalo');
                                 ?>
                                 <h3>Quadro de Horários da Turma</h3><br>
-                                <table class="table table-bordered table-striped table-hover">
+                                <ul class="list-inline pull-right">
+                                    <li><button id="indisponiveis" type="button" class="btn btn-success">Atualizar Horários Indisponíveis <i class="glyphicon glyphicon-refresh"></i></button></li>
+                                </ul>
+                                <table id="table-horario" class="table table-bordered table-striped table-hover">
                                   <thead>
                                     <tr>
                                       <th><span class="glyphicon glyphicon-time"></span></th>
@@ -210,34 +213,6 @@ use yii\widgets\ActiveForm;
             $("#conf-dados-turma").prop("disabled",false);
         }
     });
-
-    //setInterval(getHorariosOcupados,2000);
-
-    //Retorna od horários ocupados
-    $('#conf-dados-turma').click(function() {
-        getHorariosOcupados();
-    });
-
-    function getHorariosOcupados() {
-        $.ajax({
-            url: '<?= Yii::$app->request->baseUrl . '/?r=turma/horarios-ocupados' ?>',
-            type: 'post',
-            data: {
-                id: null
-            },
-            success: function (data) {
-                var dados = $.parseJSON(data);
-                $.each(dados, function(index, value) {
-                    $("#span"+value).text("Sem Salas Disponíveis").css('color', 'red');
-                    $("#link"+value).remove();
-                });
-                console.log(dados);
-            },
-            error: function () {
-                console.log("Erro ao submeter requisição Ajax");
-            }
-        });
-    }
 
     //traz os semestres referentes ao curso escolhido
     $('#turma-curso').on('change', function (e) {

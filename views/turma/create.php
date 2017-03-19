@@ -22,6 +22,10 @@ $this->title = 'Criar Turma';
 
 <script>
 
+    $('#indisponiveis').click(function() {
+        getHorariosOcupados();
+    });
+
     $('#conf-dados-turma').click(function() {
         var turma = [
             $('#turma-identificador').val(),
@@ -30,6 +34,7 @@ $this->title = 'Criar Turma';
             $('#turma-turno').val()
         ];
         createTurma(turma);
+        getHorariosOcupados();
     });
 
     function createTurma(arrTurma) {
@@ -44,6 +49,30 @@ $this->title = 'Criar Turma';
             },
             success: function (data) {
                 console.log(data);
+            },
+            error: function () {
+                console.log("Erro ao submeter requisição Ajax");
+            }
+        });
+    }
+
+    //setInterval(getHorariosOcupados,2000);
+
+    function getHorariosOcupados() {
+        $.ajax({
+            url: '<?= Yii::$app->request->baseUrl . '/?r=turma/horarios-ocupados' ?>',
+            type: 'post',
+            data: {
+                id: null
+            },
+            success: function (data) {
+                var dados = $.parseJSON(data);
+                $("#table-horario").find("span").text("");
+                $.each(dados, function(index, value) {
+                    $("#span"+value).text("Sem Salas Disponíveis").css('color', 'red');
+                    $("#link"+value).remove();
+                });
+                console.log(dados);
             },
             error: function () {
                 console.log("Erro ao submeter requisição Ajax");
