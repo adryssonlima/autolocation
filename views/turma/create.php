@@ -37,6 +37,14 @@ $this->title = 'Criar Turma';
         getHorariosOcupados();
     });
 
+    $("#table-horario").find("a").click(function(){
+        var dia = $(this).attr("id_dia");
+        var periodo = $(this).attr("id_periodo");
+        var curso = $("#turma-curso").val();
+        getSalasDisciplinas(dia, periodo, curso);
+        console.log(dia, periodo, curso);
+    });
+
     function createTurma(arrTurma) {
         $.ajax({
             url: '<?= Yii::$app->request->baseUrl . '/?r=turma/nova-turma' ?>',
@@ -78,6 +86,10 @@ $this->title = 'Criar Turma';
                 console.log("Erro ao submeter requisição Ajax");
             }
         });
+    }
+
+    function getSalasDisciplinas() {
+
     }
 
 </script>
