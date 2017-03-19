@@ -66,20 +66,42 @@ class TurmaController extends Controller
     {
         $model = new Turma();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
+        //if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        //    return $this->redirect(['view', 'id' => $model->id]);
+        //} else {
             return $this->render('create', [
                 'model' => $model,
             ]);
-        }
+        //}
     }
-
+    //Cria uma nova turma
     public function actionNovaTurma() {
         $data = Yii::$app->request->post();
         $model = new Turma();
-        
-        echo"<pre>"; die(var_dump($data));
+        foreach ($data as $key => $value) {
+            $model->$key = $value;
+        }
+        //return $model->save();
+        echo"<pre>"; die(var_dump($model));
+    }
+    //Retorna os Horarios indisponiveis
+    public function actionHorariosOcupados() {
+        $qtdsalas = Yii::$app->db->createCommand('SELECT COUNT(*) as qtd FROM cronograma.sala')->queryOne()['qtd'];
+        $semana_sala_periodo = Yii::$app->db->createCommand('SELECT * FROM cronograma.semana_sala_periodo')->queryAll();
+        $dias_horarios_indisponiveis = [];
+        foreach ($semana_sala_periodo as $key) {
+            $qtdrg = Yii::$app->db->createCommand("SELECT
+                    COUNT(*) AS qtd
+                FROM
+                    cronograma.semana_sala_periodo
+                WHERE
+                    semana = ".$key['semana']." AND periodo = ".$key['periodo'])->queryOne()['qtd'];
+
+            if ($qtdrg == $qtdsalas) {
+                $dias_horarios_indisponiveis[] = $key['semana'].$key['periodo'];
+            }
+        }
+        return json_encode($dias_horarios_indisponiveis);
     }
 
     /**

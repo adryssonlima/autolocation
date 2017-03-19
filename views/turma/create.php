@@ -23,31 +23,32 @@ $this->title = 'Criar Turma';
 <script>
 
     $('#conf-dados-turma').click(function() {
-        var identificador = $('#turma-identificador').val();
-        var curso = $('#turma-curso').val();
-        var semestre = $('#turma-semestre').val();
-        var turno = $('#turma-turno').val();
-        createTurma(identificador, curso, semestre, turno);
+        var turma = [
+            $('#turma-identificador').val(),
+            $('#turma-curso').val(),
+            $('#turma-semestre').val(),
+            $('#turma-turno').val()
+        ];
+        createTurma(turma);
     });
 
-    function createTurma(identificador, curso, semestre, turno) {
-            $.ajax({
-                url: '<?= Yii::$app->request->baseUrl . '/?r=turma/nova-turma' ?>',
-                type: 'post',
-                data: {
-                    id_identificador: identificador,
-                    id_curso: curso,
-                    id_semestre: semestre,
-                    id_turno: turno
-                },
-                success: function (data) {
-                    console.log(data);
-
-                },
-                error: function () {
-                    console.log("Erro ao submeter requisição Ajax");
-                }
-            });
+    function createTurma(arrTurma) {
+        $.ajax({
+            url: '<?= Yii::$app->request->baseUrl . '/?r=turma/nova-turma' ?>',
+            type: 'post',
+            data: {
+                identificador: arrTurma[0],
+                curso: arrTurma[1],
+                semestre: arrTurma[2],
+                turno: arrTurma[3]
+            },
+            success: function (data) {
+                console.log(data);
+            },
+            error: function () {
+                console.log("Erro ao submeter requisição Ajax");
+            }
+        });
     }
 
 </script>

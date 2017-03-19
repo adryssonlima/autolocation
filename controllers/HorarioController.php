@@ -110,33 +110,33 @@ class HorarioController extends Controller
 
         return $this->redirect(['index']);
     }
-    
+
     //Retorna as disciplinas referentes a turma
     public function actionGetDisciplinasTurma() {
         $id = Yii::$app->request->post()['id1'];
         $turma = Turma::find()->where(['id' => "$id"])->one();
         $query = Disciplina::find()->select(['id', 'nome'])->where(['curso' => "$turma->curso"])->andWhere(['semestre_ref' => "$turma->semestre"])->asArray()->all();
-        
+
         $disciplinas = [];
         foreach ($query as $disciplina) {
             $disciplinas[$disciplina['id']] = $disciplina['nome'];
         }
-       
+
         return json_encode($disciplinas);
     }
-    
+
     //Retorna os dias da semana livres
     public function actionGetDiasDaSemanaLivres() {
         #retorna a multiplicação de salas por períodos
-        $salas_periodos = Yii::$app->db->createCommand('SELECT 
+        $salas_periodos = Yii::$app->db->createCommand('SELECT
             ((SELECT COUNT(*) FROM cronograma.sala) * (SELECT COUNT(*) FROM cronograma.periodo)) AS total
         FROM
             cronograma.sala
         LIMIT 1') ->queryOne()['total'];
-        
+
         $semanas = ArrayHelper::map(Semana::find()->all(), 'id', 'dia');
         foreach ($semanas as $key => $value) {
-            $qtd_registros = Yii::$app->db->createCommand("SELECT 
+            $qtd_registros = Yii::$app->db->createCommand("SELECT
                 COUNT(*) AS qtd
             FROM
                 cronograma.semana_sala_periodo
@@ -146,18 +146,18 @@ class HorarioController extends Controller
                 unset($semanas[$key]);
             }
         }
-        
+
         return json_encode($semanas);
     }
     //Retorna as salas livres
     public function actionGetSalasLivres() {
         $id_semana = Yii::$app->request->post()['id1'];
         #retorna a quantidade de periodos
-        $qtd_periodos = Yii::$app->db->createCommand('SELECT COUNT(*) as qtd FROM cronograma.periodo') ->queryOne()['qtd'];
-        
+        $qtd_periodos = Yii::$app->db->createCommand('SELECT COUNT(*) as qtd FROM cronograma.periodo')->queryOne()['qtd'];
+
         $salas = ArrayHelper::map(Sala::find()->all(), 'id', 'identificador');
         foreach ($salas as $key => $value) {
-            $qtd_registros = Yii::$app->db->createCommand("SELECT 
+            $qtd_registros = Yii::$app->db->createCommand("SELECT
                 COUNT(*) AS qtd
             FROM
                 cronograma.semana_sala_periodo
@@ -170,15 +170,15 @@ class HorarioController extends Controller
 
         return json_encode($salas);
     }
-    
+
     //Retorna os períodos livres de acordo com a sala e com o dia da semana
     public function actionGetPeriodosLivres() {
         $data = Yii::$app->request->post();
         $id_sala = $data['id1'];
         $id_semana = $data['id2'];
-        
+
         $periodos = ArrayHelper::map(Periodo::find()->all(), 'id', 'identificador');
-        
+
         #Retorna períodos indisponíveis
         $periodos_indisponiveis = Yii::$app->db->createCommand("SELECT
                 periodo
@@ -188,12 +188,12 @@ class HorarioController extends Controller
                 semana = '$id_semana'
         AND
                 sala = '$id_sala'") ->queryAll();
-        
+
         foreach ($periodos_indisponiveis as $key => $value) {
             $id = intval($value);
             unset($periodos[$id]);
         }
-        
+
         return json_encode($periodos);
     }
 
