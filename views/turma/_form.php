@@ -168,18 +168,14 @@ use yii\widgets\ActiveForm;
     <div class="rows">
         <label for="sel1">Sala:</label>
         <select class="form-control" id="sel1">
-            <option>PGB-01</option>
-            <option>PGB-02</option>
-            <option>PGB-03</option>
-            <option>PGB-04</option>
+
         </select>
     </div>
     <br>
     <div class="rows">
         <label for="dis">Disciplina:</label>
         <select class="form-control" id="dis">
-            <option>Implementação de Banco de Dados</option>
-            <option>Programação para Internet</option>
+
         </select>
     </div>
     <br>

@@ -4,8 +4,11 @@ namespace app\controllers;
 
 use app\models\Curso;
 use app\models\Turma;
+use app\models\Sala;
+use app\models\Disciplina;
 use app\models\TurmaSearch;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -102,6 +105,31 @@ class TurmaController extends Controller
             }
         }
         return json_encode($dias_horarios_indisponiveis);
+    }
+
+    public function actionGetSalasDisciplinas() {
+        $data = Yii::$app->request->post();
+        $salas = ArrayHelper::map(Sala::find()->all(), 'id', 'identificador');
+        $salas_indisponiveis = Yii::$app->db->createCommand("SELECT
+                s.id, s.identificador
+            FROM
+                cronograma.semana_sala_periodo AS ssp
+                    INNER JOIN
+                cronograma.sala AS s ON (ssp.sala = s.id)
+            WHERE
+                semana = ".$data["id_dia"]." AND periodo = ".$data["id_periodo"])->queryAll();
+
+        foreach ($salas_indisponiveis as $value) {
+            unset($salas[$value['id']]);
+        }
+
+        $disciplinas = Disciplina::find()->select(['id', 'nome'])->where(['curso' => $data['id_curso']])->andWhere(['semestre_ref' => $data['semestre']])->asArray()->all();
+
+        $dados = json_encode(['salas' => $salas, 'disciplinas' => $disciplinas]);
+
+        return $dados;
+
+        #echo"<pre>"; die(var_dump($dados));
     }
 
     /**

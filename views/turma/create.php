@@ -41,8 +41,9 @@ $this->title = 'Criar Turma';
         var dia = $(this).attr("id_dia");
         var periodo = $(this).attr("id_periodo");
         var curso = $("#turma-curso").val();
-        getSalasDisciplinas(dia, periodo, curso);
-        console.log(dia, periodo, curso);
+        var semestre = $("#turma-semestre").val();
+        getSalasDisciplinas(dia, periodo, curso, semestre);
+        //console.log(dia, periodo, curso);
     });
 
     function createTurma(arrTurma) {
@@ -88,8 +89,30 @@ $this->title = 'Criar Turma';
         });
     }
 
-    function getSalasDisciplinas() {
-
+    function getSalasDisciplinas(dia, periodo, curso, semestre) {
+        $.ajax({
+            url: '<?= Yii::$app->request->baseUrl . '/?r=turma/get-salas-disciplinas' ?>',
+            type: 'post',
+            data: {
+                id_dia: dia,
+                id_periodo: periodo,
+                id_curso: curso,
+                semestre: semestre
+            },
+            success: function (data) {
+                var dados = $.parseJSON(data);
+/*
+                $("#"+id_select).empty();
+                $.each(array, function(index, value) {
+                    $("#"+id_select).append($("<option></option>").attr("value", index).text(value));
+                });
+*/
+                console.log(dados);
+            },
+            error: function () {
+                console.log("Erro ao submeter requisição Ajax");
+            }
+        });
     }
 
 </script>
