@@ -5,6 +5,8 @@ namespace app\controllers;
 use app\models\Curso;
 use app\models\Turma;
 use app\models\Sala;
+use app\models\Semana;
+use app\models\Periodo;
 use app\models\Disciplina;
 use app\models\TurmaSearch;
 use Yii;
@@ -77,6 +79,7 @@ class TurmaController extends Controller
             ]);
         //}
     }
+    /*
     //Cria uma nova turma
     public function actionNovaTurma() {
         $data = Yii::$app->request->post();
@@ -87,6 +90,7 @@ class TurmaController extends Controller
         //return $model->save();
         echo"<pre>"; die(var_dump($model));
     }
+    */
     //Retorna os Horarios indisponiveis
     public function actionHorariosOcupados() {
         $qtdsalas = Yii::$app->db->createCommand('SELECT COUNT(*) as qtd FROM cronograma.sala')->queryOne()['qtd'];
@@ -104,6 +108,7 @@ class TurmaController extends Controller
                 $dias_horarios_indisponiveis[] = $key['semana'].$key['periodo'];
             }
         }
+        $dias_horarios_indisponiveis = array_unique($dias_horarios_indisponiveis); //Remove o valores duplicados do array
         return json_encode($dias_horarios_indisponiveis);
     }
 
@@ -126,6 +131,19 @@ class TurmaController extends Controller
         $salasDisciplinas = ['salas' => $salas, 'disciplinas' => $disciplinas];
         #echo"<pre>"; die(var_dump($salas));
         return json_encode($salasDisciplinas);
+    }
+
+    public function actionCreateHorario() {
+
+    }
+
+    public function actionGetDiasPeriodos() {
+        $turno = Yii::$app->request->post()['turno'];
+        $dias = Semana::find()->select(['id', 'dia'])->asArray()->all();
+        $periodos = Periodo::find()->select(['id', 'identificador', 'intervalo'])->where(['turno' => "$turno"])->asArray()->all();
+        $diasPeriodos = ['dias' => $dias, 'periodos' => $periodos];
+        //echo"<pre>"; die(var_dump($diasPeriodos));
+        return json_encode($diasPeriodos);
     }
 
     /**

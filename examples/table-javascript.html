@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style-wizard-circular.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="functions-wizard-circular.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+    <table id="table-horario" class="table table-bordered table-striped table-hover">
+      <thead>
+        <tr id="th-dias-da-semana">
+          <th class="th-center"><span class="glyphicon glyphicon-time"></span></th>
+        </tr>
+      </thead>
+      <tbody id="tbody-periodos">
+
+      </tbody>
+    </table>
+
+</div>
+
+<script>
+
+    var periodos = [];
+    periodos.push({id:"1", identificador: "A-B", intervalo: "7:30 às 9:10"});
+    periodos.push({id:"2", identificador: "C-D", intervalo: "9:20 às 11:00"});
+    periodos.push({id:"3", identificador: "E-F", intervalo: "11:00 às 12:50"});
+    console.log(periodos);
+
+    var dias_da_semana = [];
+    dias_da_semana.push({id:"1", dia: "segunda"});
+    dias_da_semana.push({id:"2", dia: "terça"});
+    dias_da_semana.push({id:"3", dia: "quarta"});
+    dias_da_semana.push({id:"4", dia: "quinta"});
+    dias_da_semana.push({id:"5", dia: "sexta"});
+    console.log(dias_da_semana);
+
+    $.each(dias_da_semana, function(keyDia, dia) {
+        $('#th-dias-da-semana').append("<th class='th-center'>" + dia['dia'] + "</th>");
+    });
+
+    $.each(periodos, function(keyPeriodo, periodo) {
+        $('#tbody-periodos').append("<tr id='" + periodo['id'] + "'><th class='th-center'>" + periodo['identificador'] + "<br>" + periodo['intervalo'] + "</th></tr>");
+        $.each(dias_da_semana, function(keyDia, dia) {
+            $('#'+periodo['id']).append("<td class='tdhover'> <span id='span" + dia['id']+periodo['id'] + "'></span> <a id='link" + dia['id']+periodo['id'] + "' id_dia='" + dia['id'] + "' id_periodo='" + periodo['id'] + "' href='#' class='pull-right' data-toggle='modal' data-target='#myModal'> <span class='glyphicon glyphicon-pencil'></span> </a> </td>");
+        });
+    });
+
+</script>
+
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
+<style>
+    #div-link {
+        /*background-color: lightgrey;
+        /*width: 100px;*/
+        height: 50px;
+    }
+    a.fill-div {
+        text-align: center;
+        display: block;
+        height: 100%;
+        width: 100%;
+        text-decoration: none;
+    }
+    .tdhover:hover {
+        background-color: #d9d9d9;
+    }
+    th.th-center {
+        text-align: center;
+    }
+</style>
+
+<!-- FIM DO DE LAYOUT PARA HORÁRIO-->
+
+
+
+</body>
+</html>

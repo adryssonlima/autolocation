@@ -19,6 +19,9 @@ use yii\widgets\ActiveForm;
     .tdhover:hover {
         background-color: #d9d9d9;
     }
+    th.th-center {
+        text-align: center;
+    }
 </style>
 
 <div class="turma-form">
@@ -89,9 +92,8 @@ use yii\widgets\ActiveForm;
                 </div>
                 <div class="tab-pane" role="tabpanel" id="step2">
                     <div class="step2">
-                        <div class="step_21">
+                        <div class="">
                             <div class="row">
-
                                 <?php
                                     $dias_da_semana = ArrayHelper::map(Semana::find()->all(), 'id', 'dia');
                                     $periodos = ArrayHelper::map(Periodo::find()->all(), 'id', 'intervalo');
@@ -102,32 +104,14 @@ use yii\widgets\ActiveForm;
                                 </ul>
                                 <table id="table-horario" class="table table-bordered table-striped table-hover">
                                   <thead>
-                                    <tr>
-                                      <th><span class="glyphicon glyphicon-time"></span></th>
-                                      <?php foreach ($dias_da_semana as $keyDia => $dia) { ?>
-                                          <th><?= $dia ?></th>
-                                      <?php }?>
+                                    <tr id="th-dias-da-semana">
+
                                     </tr>
                                   </thead>
-                                  <tbody>
-                                      <?php foreach ($periodos as $keyPeriodo => $periodo) { ?>
-                                          <tr>
-                                            <th><?= $periodo ?></th>
-                                            <?php foreach ($dias_da_semana as $keyDia => $dia) { ?>
-                                                <td class="tdhover">
-                                                    <span id="<?= 'span'.$keyDia.$keyPeriodo ?>">
+                                  <tbody id="tbody-periodos">
 
-                                                    </span>
-                                                    <a id="<?= 'link'.$keyDia.$keyPeriodo ?>" id_dia="<?= $keyDia ?>" id_periodo="<?= $keyPeriodo ?>" href="#" class="pull-right" data-toggle="modal" data-target="#myModal">
-                                                        <span class="glyphicon glyphicon-pencil"></span>
-                                                    </a>
-                                                </td>
-                                            <?php }?>
-                                          </tr>
-                                      <?php }?>
                                   </tbody>
                                 </table>
-
                             </div>
                         </div>
                         <div class="step-22">
@@ -165,7 +149,7 @@ use yii\widgets\ActiveForm;
         'footer' => Html::button('Cancelar', ['class' => 'btn btn-default', 'data-dismiss' => 'modal']) . Html::button('Confirmar', ['class' => 'btn btn-primary modal-confirmar', 'data-dismiss' => 'modal'])
     ]);
 ?>
-    <input type="hidden" id="dia-periodo" />
+    <input type="hidden" id="dia-periodo" dia="" periodo="" /> <!-- guarda a referencia do dia-periodo  -->
     <div class="rows">
         <label for="sel1">Sala:</label>
         <select class="form-control" id="modal-sala">
