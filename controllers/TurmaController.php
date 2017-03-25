@@ -122,14 +122,10 @@ class TurmaController extends Controller
         foreach ($salas_indisponiveis as $value) {
             unset($salas[$value['id']]);
         }
-
-        $disciplinas = Disciplina::find()->select(['id', 'nome'])->where(['curso' => $data['id_curso']])->andWhere(['semestre_ref' => $data['semestre']])->asArray()->all();
-
-        $dados = json_encode(['salas' => $salas, 'disciplinas' => $disciplinas]);
-
-        return $dados;
-
-        #echo"<pre>"; die(var_dump($dados));
+        $disciplinas = ArrayHelper::map(Disciplina::find()->select(['id', 'nome'])->where(['curso' => $data['id_curso']])->andWhere(['semestre_ref' => $data['semestre']])->all(), 'id', 'nome');
+        $salasDisciplinas = ['salas' => $salas, 'disciplinas' => $disciplinas];
+        #echo"<pre>"; die(var_dump($salas));
+        return json_encode($salasDisciplinas);
     }
 
     /**

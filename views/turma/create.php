@@ -42,8 +42,17 @@ $this->title = 'Criar Turma';
         var periodo = $(this).attr("id_periodo");
         var curso = $("#turma-curso").val();
         var semestre = $("#turma-semestre").val();
+        $("#dia-periodo").val(dia+periodo);
         getSalasDisciplinas(dia, periodo, curso, semestre);
         //console.log(dia, periodo, curso);
+    });
+
+    $(".modal-confirmar").click(function(){
+        var sala = $("#modal-sala option:selected").val();
+        var disciplina = $("#modal-disciplina option:selected").val();
+        var id_span = "#span" + $("#dia-periodo").val();
+        $(id_span).text(disciplina + " / " + sala);
+        //createHorario(sala, disciplina);
     });
 
     function createTurma(arrTurma) {
@@ -101,12 +110,16 @@ $this->title = 'Criar Turma';
             },
             success: function (data) {
                 var dados = $.parseJSON(data);
-/*
-                $("#"+id_select).empty();
-                $.each(array, function(index, value) {
-                    $("#"+id_select).append($("<option></option>").attr("value", index).text(value));
+                var salas = dados['salas'];
+                var disciplinas = dados['disciplinas'];
+                $("#modal-sala").empty();
+                $.each(salas, function(index, value) {
+                    $("#modal-sala").append($("<option></option>").attr("value", index).text(value));
                 });
-*/
+                $("#modal-disciplina").empty();
+                $.each(disciplinas, function(index, value) {
+                    $("#modal-disciplina").append($("<option></option>").attr("value", index).text(value));
+                });
                 console.log(dados);
             },
             error: function () {

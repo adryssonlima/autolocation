@@ -162,19 +162,20 @@ use yii\widgets\ActiveForm;
     Modal::begin([
         'header' => '<h3><span class="glyphicon glyphicon-edit"></span> Escolha de Sala e Disciplina</h3>',
         'id' => 'myModal',
-        'footer' => Html::button('Cancelar', ['class' => 'btn btn-default', 'data-dismiss' => 'modal']) . Html::submitButton('Confirmar', ['class' => 'btn btn-primary'])
+        'footer' => Html::button('Cancelar', ['class' => 'btn btn-default', 'data-dismiss' => 'modal']) . Html::button('Confirmar', ['class' => 'btn btn-primary modal-confirmar', 'data-dismiss' => 'modal'])
     ]);
 ?>
+    <input type="hidden" id="dia-periodo" />
     <div class="rows">
         <label for="sel1">Sala:</label>
-        <select class="form-control" id="sel1">
+        <select class="form-control" id="modal-sala">
 
         </select>
     </div>
     <br>
     <div class="rows">
         <label for="dis">Disciplina:</label>
-        <select class="form-control" id="dis">
+        <select class="form-control" id="modal-disciplina">
 
         </select>
     </div>
