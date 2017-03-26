@@ -133,10 +133,6 @@ class TurmaController extends Controller
         return json_encode($salasDisciplinas);
     }
 
-    public function actionCreateHorario() {
-
-    }
-
     public function actionGetDiasPeriodos() {
         $turno = Yii::$app->request->post()['turno'];
         $dias = Semana::find()->select(['id', 'dia'])->asArray()->all();
