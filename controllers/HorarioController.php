@@ -139,7 +139,7 @@ class HorarioController extends Controller
             $qtd_registros = Yii::$app->db->createCommand("SELECT
                 COUNT(*) AS qtd
             FROM
-                cronograma.semana_sala_periodo
+                cronograma.horario
             WHERE
                 semana = $key") ->queryOne()['qtd'];
             if ($salas_periodos == $qtd_registros) {
@@ -160,7 +160,7 @@ class HorarioController extends Controller
             $qtd_registros = Yii::$app->db->createCommand("SELECT
                 COUNT(*) AS qtd
             FROM
-                cronograma.semana_sala_periodo
+                cronograma.horario
             WHERE
                 sala = $key AND semana = $id_semana") ->queryOne()['qtd'];
             if ($qtd_periodos == $qtd_registros) {
@@ -183,7 +183,7 @@ class HorarioController extends Controller
         $periodos_indisponiveis = Yii::$app->db->createCommand("SELECT
                 periodo
         FROM
-                cronograma.semana_sala_periodo
+                cronograma.horario
         WHERE
                 semana = '$id_semana'
         AND

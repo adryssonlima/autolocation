@@ -27,14 +27,8 @@ $this->title = 'Criar Turma';
     });
 
     $('#conf-dados-turma').click(function() {
-        var turma = [
-            $('#turma-identificador').val(),
-            $('#turma-curso').val(),
-            $('#turma-semestre').val(),
-            $('#turma-turno').val()
-        ];
-        //createTurma(turma);
-        createTabelaHorario(turma);
+        var turno = $('#turma-turno').val();
+        createTabelaHorario(turno);
         getHorariosOcupados();
     });
 
@@ -61,10 +55,11 @@ $this->title = 'Criar Turma';
     $(".modal-confirmar").click(function(){
         var dia = $("#dia-periodo").attr("dia");
         var periodo = $("#dia-periodo").attr("periodo");
-        $("#hidden"+dia+periodo).attr("dia", dia);
-        $("#hidden"+dia+periodo).attr("periodo", periodo);
-        $("#hidden"+dia+periodo).attr("disciplina", $("#modal-disciplina option:selected").val());
-        $("#hidden"+dia+periodo).attr("sala", $("#modal-sala option:selected").val());
+        var sala = $("#modal-sala option:selected").val();
+        var disciplina = $("#modal-disciplina option:selected").val();
+        //adiciona hidden com as informações do horário
+        $("#td"+dia+periodo).append("<hidden id='hidden" + dia+periodo + "' dia='" + dia + "' periodo='" + periodo + "' sala='" + sala + "' disciplina='" + disciplina + "' />");
+
         var sala = $("#modal-sala option:selected").text();
         var disciplina = $("#modal-disciplina option:selected").text();
         $("#span"+dia+periodo).text("");
@@ -75,32 +70,56 @@ $this->title = 'Criar Turma';
         }
     });
 
-/*
-    function createTurma(arrTurma) {
-        $.ajax({
-            url: '<?= ''//Yii::$app->request->baseUrl . '/?r=turma/nova-turma' ?>',
-            type: 'post',
-            data: {
-                identificador: arrTurma[0],
-                curso: arrTurma[1],
-                semestre: arrTurma[2],
-                turno: arrTurma[3]
-            },
-            success: function (data) {
-                console.log(data);
-            },
-            error: function () {
-                console.log("Erro ao submeter requisição Ajax");
+    $( "#conf-horario" ).click(function(){ // resumo dos dados
+        $("#span-identificador").text($("#turma-identificador").val());
+        $("#span-curso").text($("#turma-curso option:selected").text());
+        $("#span-semestre").text($("#turma-semestre option:selected").text());
+        $("#span-turno").text($("#turma-turno option:selected").text());
+        $("#div-table-horario-confirmar").append($("#table-horario")); //move a table horario para o wizard de confirmar dados
+        $("#table-horario").find("a").addClass("hidden"); //esconde os links de ação
+        $("#table-horario td").each(function() { //percorre todos os tds ta table
+            if (!$(this).find("a").length) { //se não existir link de ação no td, aplica hidden na span
+                $(this).find("span").addClass("hidden");
             }
         });
-    }
-*/
-    function createTabelaHorario(arrTurma) { //Cria a tabela de horáarios dinamicamente com base no turno da turma
+    });
+
+    $( "#btn-conf-voltar" ).click(function(){ //move a table horario para o wizard de definir horario
+        $("#div-table-horario").append($("#table-horario"));
+        $("#table-horario").find("a").removeClass("hidden"); //mostra os links de ação
+        $("#table-horario td").each(function() { //percorre todos os tds ta table
+            if (!$(this).find("a").length) { //se não existir link de ação no td, remove hidden da span
+                $(this).find("span").removeClass("hidden");
+            }
+        });
+    });
+
+    $("#btn-finalizar").click(function(){
+        var identificador = $('#turma-identificador').val();
+        var curso = $('#turma-curso').val();
+        var semestre = $('#turma-semestre').val();
+        var turno = $('#turma-turno').val();
+        var arrayhorarios = [];
+        $("#table-horario td hidden").each(function() {
+            var horario = { //os atributos devem estar OBRIGATORIAMENTE nessa ordem!!!
+                turma: null, //atributo usado para guardar o id da turma apos inserida no banco
+                dia: $(this).attr("dia"),
+                sala: $(this).attr("sala"),
+                periodo: $(this).attr("periodo"),
+                disciplina: $(this).attr("disciplina")
+            };
+            arrayhorarios.push(horario);
+        });
+        createTurmaHorario(identificador, curso, semestre, turno, arrayhorarios);
+        //console.log(arrayhorarios);
+    });
+
+    function createTabelaHorario(turno) { //Cria a tabela de horáarios dinamicamente com base no turno da turma
         $.ajax({
             url: '<?= Yii::$app->request->baseUrl . '/?r=turma/get-dias-periodos' ?>',
             type: 'post',
             data: {
-                turno: arrTurma[3]
+                turno: turno
             },
             success: function (data) {
                 var dados = $.parseJSON(data);
@@ -116,7 +135,7 @@ $this->title = 'Criar Turma';
                 $.each(periodos, function(keyPeriodo, periodo) {
                     $('#tbody-periodos').append("<tr id='" + periodo['id'] + "'><th class='th-center'>" + periodo['identificador'] + "<br>" + periodo['intervalo'] + "</th></tr>");
                     $.each(dias_da_semana, function(keyDia, dia) {
-                        $('#'+periodo['id']).append("<td id='td" + dia['id']+periodo['id'] + "' class='tdhover'> <span id='span" + dia['id']+periodo['id'] + "'></span> <hidden id='hidden" + dia['id']+periodo['id'] + "' dia='' periodo='' sala='' disciplina='' /> <a id='link" + dia['id']+periodo['id'] + "' id_dia='" + dia['id'] + "' id_periodo='" + periodo['id'] + "' href='#' class='pull-right text-success' data-toggle='modal' data-target='#myModal' title='Editar'> <span class='glyphicon glyphicon-pencil'></span> </a> </td>");
+                        $('#'+periodo['id']).append("<td id='td" + dia['id']+periodo['id'] + "' class='tdhover'> <span id='span" + dia['id']+periodo['id'] + "'></span> <a id='link" + dia['id']+periodo['id'] + "' id_dia='" + dia['id'] + "' id_periodo='" + periodo['id'] + "' href='#' class='pull-right text-success' data-toggle='modal' data-target='#myModal' title='Editar'> <span class='glyphicon glyphicon-pencil'></span> </a> </td>");
                     });
                 });
                 console.log("Tabela Criada");
@@ -175,6 +194,26 @@ $this->title = 'Criar Turma';
                     $("#modal-disciplina").append($("<option></option>").attr("value", index).text(value));
                 });
                 console.log(dados);
+            },
+            error: function () {
+                console.log("Erro ao submeter requisição Ajax");
+            }
+        });
+    }
+
+    function createTurmaHorario(identificador, curso, semestre, turno, arrayhorarios) {
+        $.ajax({
+            url: '<?= Yii::$app->request->baseUrl . '/?r=turma/nova-turma' ?>',
+            type: 'post',
+            data: {
+                identificador: identificador,
+                curso: curso,
+                semestre: semestre,
+                turno: turno,
+                horarios: arrayhorarios
+            },
+            success: function (data) {
+                console.log(data);
             },
             error: function () {
                 console.log("Erro ao submeter requisição Ajax");

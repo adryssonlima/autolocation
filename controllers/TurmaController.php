@@ -79,28 +79,47 @@ class TurmaController extends Controller
             ]);
         //}
     }
-    /*
+
     //Cria uma nova turma
     public function actionNovaTurma() {
         $data = Yii::$app->request->post();
         $model = new Turma();
-        foreach ($data as $key => $value) {
-            $model->$key = $value;
+        $model->identificador = $data['identificador'];
+        $model->curso = $data['curso'];
+        $model->semestre = $data['semestre'];
+        $model->turno = $data['turno'];
+        if ($model->save()) {
+            if ($this->createHorarios($model->id, $data['horarios']) >= 1) {
+                return $this->redirect(['index']);
+            }
         }
-        //return $model->save();
-        echo"<pre>"; die(var_dump($model));
+        die("Erro ao inserir dados!");
     }
-    */
+
+    public function createHorarios($id_turma, $horarios) {
+        foreach ($horarios as $key => $horario) {
+            $horarios[$key]["turma"] = $id_turma;
+        }
+        return Yii::$app->db->createCommand()
+            ->batchInsert("cronograma.horario", [
+                "turma",
+                "semana",
+                "sala",
+                "periodo",
+                "disciplina"
+            ], $horarios)->execute();
+    }
+
     //Retorna os Horarios indisponiveis
     public function actionHorariosOcupados() {
         $qtdsalas = Yii::$app->db->createCommand('SELECT COUNT(*) as qtd FROM cronograma.sala')->queryOne()['qtd'];
-        $semana_sala_periodo = Yii::$app->db->createCommand('SELECT * FROM cronograma.semana_sala_periodo')->queryAll();
+        $horarios = Yii::$app->db->createCommand('SELECT * FROM cronograma.horario')->queryAll();
         $dias_horarios_indisponiveis = [];
-        foreach ($semana_sala_periodo as $key) {
+        foreach ($horarios as $key) {
             $qtdrg = Yii::$app->db->createCommand("SELECT
                     COUNT(*) AS qtd
                 FROM
-                    cronograma.semana_sala_periodo
+                    cronograma.horario
                 WHERE
                     semana = ".$key['semana']." AND periodo = ".$key['periodo'])->queryOne()['qtd'];
 
@@ -118,7 +137,7 @@ class TurmaController extends Controller
         $salas_indisponiveis = Yii::$app->db->createCommand("SELECT
                 s.id, s.identificador
             FROM
-                cronograma.semana_sala_periodo AS ssp
+                cronograma.horario AS ssp
                     INNER JOIN
                 cronograma.sala AS s ON (ssp.sala = s.id)
             WHERE

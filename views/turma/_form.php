@@ -92,16 +92,12 @@ use yii\widgets\ActiveForm;
                 </div>
                 <div class="tab-pane" role="tabpanel" id="step2">
                     <div class="step2">
-                        <div class="">
-                            <div class="row">
-                                <?php
-                                    $dias_da_semana = ArrayHelper::map(Semana::find()->all(), 'id', 'dia');
-                                    $periodos = ArrayHelper::map(Periodo::find()->all(), 'id', 'intervalo');
-                                ?>
-                                <h3>Quadro de Horários da Turma</h3><br>
-                                <ul class="list-inline pull-right">
-                                    <li><button id="indisponiveis" type="button" class="btn btn-success">Atualizar Horários Indisponíveis <i class="glyphicon glyphicon-refresh"></i></button></li>
-                                </ul>
+                        <div class="row">
+                            <h3>Quadro de Horários da Turma</h3><br>
+                            <ul class="list-inline pull-right">
+                                <li><button id="indisponiveis" type="button" class="btn btn-success">Atualizar Horários Indisponíveis <i class="glyphicon glyphicon-refresh"></i></button></li>
+                            </ul>
+                            <div id="div-table-horario">
                                 <table id="table-horario" class="table table-bordered table-striped table-hover">
                                   <thead>
                                     <tr id="th-dias-da-semana">
@@ -114,25 +110,46 @@ use yii\widgets\ActiveForm;
                                 </table>
                             </div>
                         </div>
-                        <div class="step-22">
-
+                        <div class="row">
+                            <ul class="list-inline pull-right">
+                                <li><button type="button" class="btn btn-default prev-step"><i class="glyphicon glyphicon-arrow-left"></i> Voltar</button></li>
+                                <li><button id="conf-horario" type="button" class="btn btn-primary next-step">Confirmar Horário <i class="glyphicon glyphicon-arrow-right"></i></button></li>
+                            </ul>
                         </div>
                     </div>
-                    <ul class="list-inline pull-right">
-                        <li><button type="button" class="btn btn-default prev-step"><i class="glyphicon glyphicon-arrow-left"></i> Voltar</button></li>
-                        <li><button type="button" class="btn btn-primary next-step">Confirmar Horário <i class="glyphicon glyphicon-arrow-right"></i></button></li>
-                    </ul>
                 </div>
 
                 <div class="tab-pane" role="tabpanel" id="complete">
                     <div class="step44">
-                        <h3>Resumo dos Dados</h3><br>
+                        <h3>Confirmar Dados e Horário da Turma</h3><br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <b>Identificador:</b> <span id="span-identificador"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <b>Curso:</b> <span id="span-curso"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <b>Semestre Atual da Turma:</b> <span id="span-semestre"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <b>Turno:</b> <span id="span-turno"></span>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row" id="div-table-horario-confirmar">
 
-
+                        </div>
+                        <div class="row">
+                            <ul class="list-inline pull-right">
+                                <li><button id="btn-conf-voltar" type="button" class="btn btn-default prev-step"><i class="glyphicon glyphicon-arrow-left"></i> Voltar</button></li>
+                                <li><button id="btn-finalizar" type="button" class="btn btn-primary next-step">Finalizar <i class="glyphicon glyphicon-ok"></i></button></li>
+                            </ul>
+                        </div>
                     </div>
-                    <ul class="list-inline pull-right">
-                        <li><button type="button" class="btn btn-primary next-step">Finalizar <i class="glyphicon glyphicon-ok"></i></button></li>
-                    </ul>
+
                 </div>
                 <div class="clearfix"></div>
             </div>
