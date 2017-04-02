@@ -113,3 +113,13 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+.clicavel{
+    cursor: pointer;
+}
+
+.painel-titulo{
+    background-color: #424241;
+    padding: 7px;
+    border-radius: 7px;
+}

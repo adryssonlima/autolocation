@@ -19,43 +19,24 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'curso')->dropDownList(ArrayHelper::map(Curso::find()->all(), 'id', 'nome'), ['prompt' => 'Selecione...']) ?>
-    
+
     <?= $form->field($model, 'semestre_ref')->dropDownList([], ['prompt' => 'Selecione...']) ?>
 
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    <div class="form-group pull-right acoes">
+        <?= Html::button("<i class='fa fa-times' aria-hidden='true'></i> Cancelar", ['class' => 'btn btn-default', "data-dismiss" => "modal"]) ?>
+        <?= Html::submitButton($model->isNewRecord ? "<i class='fa fa-check' aria-hidden='true'></i> Criar" : "<i class='fa fa-check' aria-hidden='true'></i> Alterar", ['class' => $model->isNewRecord ? 'btn btn-success aplicar' : 'btn btn-primary aplicar']) ?>
+        <input type="hidden" class="remover-bnt-confirmar" name="remover" value="false" />
+        <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>" />
     </div>
-
+    <br><br>
     <?php ActiveForm::end(); ?>
 
 </div>
 
-
 <script>
-    
-    $('#disciplina-curso').on('change', function (e) {
-        var id_disciplina = $(this).val();
-        getSemestres(id_disciplina);
-    });
 
-    function getSemestres(value) {
-            $.ajax({
-                url: '<?= Yii::$app->request->baseUrl . '/?r=disciplina/get-quantidade-semestres' ?>',
-                type: 'post',
-                data: {
-                    id: value
-                },
-                success: function (data) {
-                    //console.log(data);
-                    $("#disciplina-semestre_ref").empty();
-                    for (i = 1; i <= data; i++) { 
-                        $("#disciplina-semestre_ref").append($("<option></option>").attr("value", i).text(i));
-                    }
-                },
-                error: function () {
-                    console.log("Erro ao submeter requisição Ajax");
-                }
-            });
-    }
+
+
+
 
 </script>

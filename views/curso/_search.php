@@ -15,14 +15,19 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <?= ''//$form->field($model, 'nome')->textInput()->input('nome', ['placeholder' => "Buscar..."])->label(false); ?>
 
-    <?= $form->field($model, 'nome') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+    <div class="row">
+        <div class="input-group">
+            <input type="nome" id="cursosearch-nome" class="form-control" name="CursoSearch[nome]" value="" placeholder="Buscar curso...">
+            <span class="input-group-btn"><?= Html::submitButton("<i class='fa fa-search' aria-hidden='true'></i>", ['class' => 'btn btn-primary']) ?></span>
+        </div>
     </div>
+
+    <!--<div class="form-group">
+        <?= ''//Html::submitButton('Pesquisar', ['class' => 'btn btn-primary']) ?>
+        <?= ''// Html::resetButton('Limpar', ['class' => 'btn btn-default']) ?>
+    </div>-->
 
     <?php ActiveForm::end(); ?>
 

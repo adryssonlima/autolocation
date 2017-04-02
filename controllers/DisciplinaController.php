@@ -38,7 +38,7 @@ class DisciplinaController extends Controller
     {
         $searchModel = new DisciplinaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        //echo"<pre>";die(var_dump($dataProvider->getModels()));
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -67,9 +67,9 @@ class DisciplinaController extends Controller
         $model = new Disciplina();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
-            return $this->render('create', [
+            return $this->renderAjax('create', [
                 'model' => $model,
             ]);
         }
@@ -86,9 +86,9 @@ class DisciplinaController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
-            return $this->render('update', [
+            return $this->renderAjax('update', [
                 'model' => $model,
             ]);
         }
@@ -100,13 +100,19 @@ class DisciplinaController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
+    public function actionDelete($id) {
+        $model = $this->findModel($id);
 
-        return $this->redirect(['index']);
+        if (Yii::$app->request->post("remover")) {
+            $model->delete();
+            return $this->redirect(['index']);
+        } else {
+            return $this->renderAjax('delete', [
+                'model' => $model,
+            ]);
+        }
     }
-    
+
     //Retorna a quantidade de semestres do curso
     public function actionGetQuantidadeSemestres() {
         $id = Yii::$app->request->post()['id'];
