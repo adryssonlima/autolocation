@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = 'Update';
     $( document ).ready(function($) {
         var curso = $(' #disciplina-curso option:checked' ).val();
         getSemestres(url, curso, csrftoken);
-        $("#disciplina-semestre_ref").val("<?= $model->semestre_ref ?>");
+        $("#disciplina-semestre_ref").val("<?= $model->semestre_ref ?>").change();
     });
 
     $('#disciplina-curso').on('change', function (e) {
