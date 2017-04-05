@@ -9,17 +9,8 @@ var connection = mysql.createConnection({
 
 //teste a conexão
 connection.connect(function(err) {
-	if (err) {
-    	console.error('error connecting: ' + err.stack);
-	    return;
-	}
-	console.log('connected as id ' + connection.threadId);
+	if (err) throw err;
 });
 
-//query
-connection.query('SELECT * FROM curso', function (error, results, fields) {
-	if (error) throw error;
-	console.log(results);
-});
 
-connection.end();
+module.exports = connection;
