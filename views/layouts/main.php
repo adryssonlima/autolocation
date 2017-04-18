@@ -21,6 +21,7 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="js/jquery-3.1.1.min.js"></script>
     <script src="js/functions.js"></script>
+    <script src="js/vue.min.js"></script>
     <link rel="stylesheet" href="css/style-wizard-circular.css">
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
     <?= Html::csrfMetaTags() ?>
