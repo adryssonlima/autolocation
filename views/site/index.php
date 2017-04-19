@@ -14,11 +14,11 @@ $this->title = 'Auto Location';
 
     <div class="row" id="cards">
         <div class="col-sm-3" v-for="(item,index) in turmas">
-            <div class="panel panel-default">
-                <div class="panel-heading">{{item.turma}}</div>
+            <div class="panel panel-info" style="border-style: solid; border-width: 3px;">
+                <div class="panel-heading"><b style="font-size: 170%">{{item.turma}}</b></div>
                 <div class="panel-body">
-                    <p>{{item.disciplina}}</p>
-                    <p>{{item.sala}}</p>
+                    <p><b>{{item.disciplina}}</b></p>
+                    <p><b>{{item.sala}}</b></p>
                 </div>
             </div>
         </div>

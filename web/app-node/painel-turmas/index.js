@@ -8,7 +8,7 @@ setInterval(function(){
 		if (err) throw err;
 		io.sockets.emit('listagem de turmas', result);
 	});
-}, 2000);
+}, 1000);
 
 /*
 SELECT 

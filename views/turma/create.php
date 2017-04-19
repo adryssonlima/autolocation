@@ -36,10 +36,7 @@ $this->title = 'Criar Turma';
         var dia = $(this).attr("id_dia");
         var periodo = $(this).attr("id_periodo");
         if ($(this).find("span").attr("class") == "glyphicon glyphicon-trash") {
-            $("#hidden"+dia+periodo).attr("dia", "");
-            $("#hidden"+dia+periodo).attr("periodo", "");
-            $("#hidden"+dia+periodo).attr("disciplina", "");
-            $("#hidden"+dia+periodo).attr("sala", "");
+            $("#hidden"+dia+periodo).remove();
             //$("#span"+dia+periodo).hide('1000');
             $("#span"+dia+periodo).text("");
             $(this).remove();
