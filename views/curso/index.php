@@ -72,7 +72,8 @@ $this->title = 'Cursos';
 <?php
 Modal::begin([
     "header" => "<h3 class='modal-titulo'></h3>",
-    "id" => "modal"
+    "id" => "modal",
+    "size" => "modal-lg",
 ]);
 echo "<div class='modal-conteudo'></div>";
 Modal::end();
