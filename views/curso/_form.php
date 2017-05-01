@@ -17,8 +17,12 @@ use yii\widgets\ActiveForm;
     <?= ''//$form->field($model, 'qtd_semestre')->textInput(['type' => 'number', 'maxlength' => true]) ?>
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-3">
             <h4><span value="1" class="label label-primary clicavel add-semestre" title="Clique para adicionar semestre">Adicionar Semestre ao Curso <i class="fa fa-plus-circle" aria-hidden="true"></i></span></h4>
+        </div>
+
+        <div class="col-md-3">
+            <h4>&nbsp;&nbsp;<span value="" class="label label-danger clicavel rm-semestre hidden" title="Clique para remover o último semestre adicionado">Remover Semestre Adicionado <i class="fa fa-minus-circle" aria-hidden="true"></i></span></h4>
         </div>
     </div>
 
@@ -40,63 +44,115 @@ use yii\widgets\ActiveForm;
 
 <script>
 
+    function addDisciplina() {
+        var disciplina = '<div class="row">'+
+            '<div class="col-md-7">'+
+                '<input type="text" class="form-control" name="disciplina" maxlength="100" aria-required="true">'+
+            '</div>'+
+            '<div class="col-md-1">'+
+                '<select class="form-control padding" name="cht">'+
+                    '<option value="0">0</option>'+
+                    '<option value="44">44</option>'+
+                    '<option value="88">88</option>'+
+                '</select>'+
+            '</div>'+
+            '<div class="col-md-1">'+
+                '<select class="form-control padding" name="chp">'+
+                    '<option value="0">0</option>'+
+                    '<option value="44">44</option>'+
+                    '<option value="88">88</option>'+
+                '</select>'+
+            '</div>'+
+            '<div class="col-md-1">'+
+                '<select class="form-control padding" name="chc">'+
+                    '<option value="0">0</option>'+
+                    '<option value="44">44</option>'+
+                    '<option value="88">88</option>'+
+                '</select>'+
+            '</div>'+
+            '<div class="col-md-2">'+
+                '<span class="clicavel rm-disciplina" title="Remover Disciplina"><i class="fa fa-minus-circle fa-2x text-danger" aria-hidden="true"></i></span>'+
+                '&nbsp;&nbsp;&nbsp<span class="clicavel add-disciplina" title="Adicionar Disciplina"><i class="fa fa-plus-circle fa-2x text-primary" aria-hidden="true"></i></span>'+
+            '</div>'+
+        '<br></div>';
+        $('.disciplinas').append(disciplina);
+    }
+
     function addSemestre(value) {
         var semestre = '<div class="semestre" id="semestre'+value+'">'+
             '<fieldset>'+
-                '<legend>'+value+'ª semestre:&nbsp;&nbsp<span value="'+value+'" class="clicavel rm-semestre" title="Remover Semestre"><i class="fa fa-minus-circle text-danger" aria-hidden="true"></i></span></legend>'+
+                '<legend>'+value+'ª semestre: </legend>'+
                 '<div class="row">'+
                     '<div class="col-md-7"><label>Nome Disciplina:</label></div>'+
                     '<div class="col-md-1"><label>CH/T:</label></div>'+
                     '<div class="col-md-1"><label>CH/P:</label></div>'+
                     '<div class="col-md-1"><label>CH/C:</label></div>'+
                 '</div>'+
-                '<div class="row">'+
-                    '<div class="col-md-7">'+
-                        '<input type="text" class="form-control" name="disciplina" maxlength="100" aria-required="true">'+
-                    '</div>'+
-                    '<div class="col-md-1">'+
-                        '<select class="form-control padding" name="cht">'+
-                            '<option value="0">0</option>'+
-                            '<option value="44">44</option>'+
-                            '<option value="88">88</option>'+
-                        '</select>'+
-                    '</div>'+
-                    '<div class="col-md-1">'+
-                        '<select class="form-control padding" name="chp">'+
-                            '<option value="0">0</option>'+
-                            '<option value="44">44</option>'+
-                            '<option value="88">88</option>'+
-                        '</select>'+
-                    '</div>'+
-                    '<div class="col-md-1">'+
-                        '<select class="form-control padding" name="chc">'+
-                            '<option value="0">0</option>'+
-                            '<option value="44">44</option>'+
-                            '<option value="88">88</option>'+
-                        '</select>'+
-                    '</div>'+
-                    '<div class="col-md-2">'+
-                        '<span class="clicavel" title="Adicionar Disciplina"><i class="fa fa-plus-circle fa-2x text-primary" aria-hidden="true"></i></span>'+
-                        '&nbsp;&nbsp;&nbsp<span class="clicavel" title="Remover Disciplina"><i class="fa fa-minus-circle fa-2x text-danger" aria-hidden="true"></i></span>'+
+                '<div class="disciplinas">'+
+                    '<div class="row">'+
+                        '<div class="col-md-7">'+
+                            '<input type="text" class="form-control" name="disciplina" maxlength="100" aria-required="true">'+
+                        '</div>'+
+                        '<div class="col-md-1">'+
+                            '<select class="form-control padding" name="cht">'+
+                                '<option value="0">0</option>'+
+                                '<option value="44">44</option>'+
+                                '<option value="88">88</option>'+
+                            '</select>'+
+                        '</div>'+
+                        '<div class="col-md-1">'+
+                            '<select class="form-control padding" name="chp">'+
+                                '<option value="0">0</option>'+
+                                '<option value="44">44</option>'+
+                                '<option value="88">88</option>'+
+                            '</select>'+
+                        '</div>'+
+                        '<div class="col-md-1">'+
+                            '<select class="form-control padding" name="chc">'+
+                                '<option value="0">0</option>'+
+                                '<option value="44">44</option>'+
+                                '<option value="88">88</option>'+
+                            '</select>'+
+                        '</div>'+
+                        '<div class="col-md-2">'+
+                            '<span class="clicavel rm-disciplina" title="Remover Disciplina"><i class="fa fa-minus-circle fa-2x text-danger" aria-hidden="true"></i></span>'+
+                            '&nbsp;&nbsp;&nbsp<span class="clicavel add-disciplina" title="Adicionar Disciplina"><i class="fa fa-plus-circle fa-2x text-primary" aria-hidden="true"></i></span>'+
+                        '</div>'+
                     '</div>'+
                 '</div>'+
             '</fieldset>'+
-        '</div> <br><br>';
+        '<br></div>';
         $('.semestres').append(semestre);
     }
 
-    $('.add-semestre').click(function(){
+    $(".add-semestre").click(function(){
         var value = $(this).attr('value');
         addSemestre(value);
+        $(".rm-semestre").attr('value', value).removeClass('hidden');
         value++;
         $(this).attr('value', value);
     });
 
-    $( ".semestres" ).on( "click", ".rm-semestre", function() {
+    $(".rm-semestre").click(function() {
         var value = $(this).attr('value');
         $('#semestre'+value).remove();
+        $(".add-semestre").attr('value', value);
+        value--;
+        if (value == 0) {
+            $(this).addClass('hidden');
+        }
+        $(this).attr('value', value);
     });
 
+    $(".semestres").on("click", ".add-disciplina", function() {
+        console.log("add Disciplina");
+        addDisciplina();
+    });
+
+    $(".semestres").on("click", ".rm-disciplina", function() {
+        console.log("rm Disciplina");
+        //$(this).remove();
+    });
 
 </script>
 
