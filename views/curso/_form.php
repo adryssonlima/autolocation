@@ -44,7 +44,7 @@ use yii\widgets\ActiveForm;
 
 <script>
 
-    function addDisciplina() {
+    function addDisciplina(semestre) {
         var disciplina = '<div class="row">'+
             '<div class="col-md-7">'+
                 '<input type="text" class="form-control" name="disciplina" maxlength="100" aria-required="true">'+
@@ -72,23 +72,22 @@ use yii\widgets\ActiveForm;
             '</div>'+
             '<div class="col-md-2">'+
                 '<span class="clicavel rm-disciplina" title="Remover Disciplina"><i class="fa fa-minus-circle fa-2x text-danger" aria-hidden="true"></i></span>'+
-                '&nbsp;&nbsp;&nbsp<span class="clicavel add-disciplina" title="Adicionar Disciplina"><i class="fa fa-plus-circle fa-2x text-primary" aria-hidden="true"></i></span>'+
             '</div>'+
         '<br></div>';
-        $('.disciplinas').append(disciplina);
+        $('#disciplinas-semestre-'+semestre).append(disciplina);
     }
 
     function addSemestre(value) {
         var semestre = '<div class="semestre" id="semestre'+value+'">'+
             '<fieldset>'+
-                '<legend>'+value+'ª semestre: </legend>'+
+                '<legend>'+value+'ª semestre: <span style="float: right;" semestre="'+value+'" class="label label-success clicavel add-disciplina" title="Clique para adicionar uma disciplina neste semestre">Adicionar Disciplina <i class="fa fa-plus-circle" aria-hidden="true"></i></span></legend>'+
                 '<div class="row">'+
                     '<div class="col-md-7"><label>Nome Disciplina:</label></div>'+
                     '<div class="col-md-1"><label>CH/T:</label></div>'+
                     '<div class="col-md-1"><label>CH/P:</label></div>'+
                     '<div class="col-md-1"><label>CH/C:</label></div>'+
                 '</div>'+
-                '<div class="disciplinas">'+
+                '<div class="disciplinas" id="disciplinas-semestre-'+value+'">'+
                     '<div class="row">'+
                         '<div class="col-md-7">'+
                             '<input type="text" class="form-control" name="disciplina" maxlength="100" aria-required="true">'+
@@ -116,7 +115,6 @@ use yii\widgets\ActiveForm;
                         '</div>'+
                         '<div class="col-md-2">'+
                             '<span class="clicavel rm-disciplina" title="Remover Disciplina"><i class="fa fa-minus-circle fa-2x text-danger" aria-hidden="true"></i></span>'+
-                            '&nbsp;&nbsp;&nbsp<span class="clicavel add-disciplina" title="Adicionar Disciplina"><i class="fa fa-plus-circle fa-2x text-primary" aria-hidden="true"></i></span>'+
                         '</div>'+
                     '</div>'+
                 '</div>'+
@@ -146,12 +144,13 @@ use yii\widgets\ActiveForm;
 
     $(".semestres").on("click", ".add-disciplina", function() {
         console.log("add Disciplina");
-        addDisciplina();
+        var semestre = $(this).attr('semestre');
+        addDisciplina(semestre);
     });
 
     $(".semestres").on("click", ".rm-disciplina", function() {
         console.log("rm Disciplina");
-        //$(this).remove();
+        //$(this).parent().prev( ".testeee" ).remove();
     });
 
 </script>
