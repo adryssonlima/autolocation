@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
 <script>
 
-    var url = '<?= Yii::$app->request->baseUrl . '/?r=disciplina/get-quantidade-semestres' ?>';
+    var url = '<?= Yii::$app->request->baseUrl . '/disciplina/get-quantidade-semestres' ?>';
     var csrftoken = '<?= Yii::$app->request->getCsrfToken() ?>';
 
     $( document ).ready(function($) {

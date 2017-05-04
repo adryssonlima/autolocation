@@ -113,7 +113,7 @@ $this->title = 'Criar Turma';
 
     function createTabelaHorario(turno) { //Cria a tabela de horáarios dinamicamente com base no turno da turma
         $.ajax({
-            url: '<?= Yii::$app->request->baseUrl . '/?r=turma/get-dias-periodos' ?>',
+            url: '<?= Yii::$app->request->baseUrl . '/turma/get-dias-periodos' ?>',
             type: 'post',
             data: {
                 turno: turno
@@ -147,7 +147,7 @@ $this->title = 'Criar Turma';
 
     function getHorariosOcupados() {
         $.ajax({
-            url: '<?= Yii::$app->request->baseUrl . '/?r=turma/horarios-ocupados' ?>',
+            url: '<?= Yii::$app->request->baseUrl . '/turma/horarios-ocupados' ?>',
             type: 'post',
             data: {
                 id: null
@@ -170,7 +170,7 @@ $this->title = 'Criar Turma';
 
     function getSalasDisciplinas(dia, periodo, curso, semestre) {
         $.ajax({
-            url: '<?= Yii::$app->request->baseUrl . '/?r=turma/get-salas-disciplinas' ?>',
+            url: '<?= Yii::$app->request->baseUrl . '/turma/get-salas-disciplinas' ?>',
             type: 'post',
             data: {
                 id_dia: dia,
@@ -200,7 +200,7 @@ $this->title = 'Criar Turma';
 
     function createTurmaHorario(identificador, curso, semestre, turno, arrayhorarios) {
         $.ajax({
-            url: '<?= Yii::$app->request->baseUrl . '/?r=turma/nova-turma' ?>',
+            url: '<?= Yii::$app->request->baseUrl . '/turma/nova-turma' ?>',
             type: 'post',
             data: {
                 identificador: identificador,

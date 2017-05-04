@@ -81,7 +81,7 @@ Modal::end();
 <script>
 
     $(".new").click(function(){
-        var url = "<?= Yii::$app->request->baseUrl . '/?r=curso/create' ?>";
+        var url = "<?= Yii::$app->request->baseUrl . '/curso/create' ?>";
         var titulo = "<i class='fa fa-graduation-cap' aria-hidden='true'></i> Novo Curso";
         var csrftoken = "<?= Yii::$app->request->getCsrfToken() ?>";
         modalAjax(url, titulo, csrftoken);

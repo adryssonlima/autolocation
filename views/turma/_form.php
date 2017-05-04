@@ -220,7 +220,7 @@ use yii\widgets\ActiveForm;
 
     function getSemestres(value) {
         $.ajax({
-            url: '<?= Yii::$app->request->baseUrl . '/?r=turma/get-quantidade-semestres' ?>',
+            url: '<?= Yii::$app->request->baseUrl . '/turma/get-quantidade-semestres' ?>',
             type: 'post',
             data: {
                 id: value

@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = 'Delete';
     $('.aplicar').html("<i class='fa fa-check' aria-hidden='true'></i> Remover");
     $('.remover-bnt-confirmar').val("true");
 
-    var url = '<?= Yii::$app->request->baseUrl . '/?r=disciplina/get-quantidade-semestres' ?>';
+    var url = '<?= Yii::$app->request->baseUrl . '/disciplina/get-quantidade-semestres' ?>';
     var csrftoken = '<?= Yii::$app->request->getCsrfToken() ?>';
 
     $( document ).ready(function($) {
