@@ -150,7 +150,7 @@ use yii\widgets\ActiveForm;
 
     $(".semestres").on("click", ".rm-disciplina", function() {
         console.log("rm Disciplina");
-        //$(this).parent().prev( ".testeee" ).remove();
+        $(this).closest('.row').remove();
     });
 
 </script>
