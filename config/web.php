@@ -1,8 +1,6 @@
 <?php
 use \yii\web\Request;
 
-$baseUrl = str_replace('/web', '', (new Request)->getBaseUrl());
-
 $params = require(__DIR__ . '/params.php');
 
 $config = [
@@ -13,7 +11,7 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'autolocation',
-            'baseUrl' => $baseUrl,
+            'baseUrl' => '/autolocation',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',

@@ -190,8 +190,7 @@ use yii\widgets\ActiveForm;
 ?>
 <!-- FIM MODAL -->
 
-
-<script src="js/functions-wizard-circular.js"></script>
+<script src="<?= Yii::$app->request->baseUrl ?>/web/js/functions-wizard-circular.js"></script>
 <script>
 
     //valida o formulário

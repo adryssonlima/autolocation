@@ -19,11 +19,11 @@ AppAsset::register($this);
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="js/jquery-3.1.1.min.js"></script>
-    <script src="js/functions.js"></script>
-    <script src="js/vue.min.js"></script>
-    <link rel="stylesheet" href="css/style-wizard-circular.css">
-    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+    <script src="<?= Yii::$app->request->baseUrl ?>/web/js/jquery-3.1.1.min.js"></script>
+    <script src="<?= Yii::$app->request->baseUrl ?>/web/js/functions.js"></script>
+    <script src="<?= Yii::$app->request->baseUrl ?>/web/js/vue.min.js"></script>
+    <link rel="stylesheet" href="<?= Yii::$app->request->baseUrl ?>/web/css/style-wizard-circular.css">
+    <link rel="stylesheet" href="<?= Yii::$app->request->baseUrl ?>/web/font-awesome-4.7.0/css/font-awesome.min.css">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>

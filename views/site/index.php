@@ -26,7 +26,7 @@ $this->title = 'Auto Location';
 
 </div>
 
-<script src="js/socket.io-1.4.5.js"></script>
+<script src="<?= Yii::$app->request->baseUrl ?>/web/js/socket.io-1.4.5.js"></script>
 <script>
     $(function () {
         var socket = io.connect('http://127.0.0.1:3000');
