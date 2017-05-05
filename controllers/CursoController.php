@@ -65,7 +65,9 @@ class CursoController extends Controller
     {
         $model = new Curso();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $data = Yii::$app->request->post();
+            echo"<pre>";die(var_dump($data));
             return $this->redirect(['index']);
         } else {
             return $this->renderAjax('create', [
