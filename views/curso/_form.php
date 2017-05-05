@@ -18,14 +18,11 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-3">
-            <h4><span value="1" class="label label-primary clicavel add-semestre" title="Clique para adicionar semestre">Adicionar Semestre ao Curso <i class="fa fa-plus-circle" aria-hidden="true"></i></span></h4>
-        </div>
-
-        <div class="col-md-3">
-            <h4>&nbsp;&nbsp;<span value="" class="label label-danger clicavel rm-semestre hidden" title="Clique para remover o último semestre adicionado">Remover Semestre Adicionado <i class="fa fa-minus-circle" aria-hidden="true"></i></span></h4>
+            <span value="1" class="label label-primary clicavel add-semestre" title="Clique para adicionar semestre"><i class="fa fa-plus-circle" aria-hidden="true"></i> Semestre</span>
+            &nbsp;&nbsp;&nbsp;<span value="" class="label label-danger clicavel rm-semestre hidden" title="Clique para remover o último semestre adicionado"><i class="fa fa-minus-circle" aria-hidden="true"></i> Semestre</span>
         </div>
     </div>
-
+    <br>
     <div class="semestres">
 
     </div>
@@ -45,7 +42,7 @@ use yii\widgets\ActiveForm;
 <script>
 
     function addDisciplina(semestre) {
-        var disciplina = '<div class="row">'+
+        var disciplina = '<div class="row margin-bottom">'+
             '<div class="col-md-7">'+
                 '<input type="text" class="form-control" name="disciplina" maxlength="100" aria-required="true">'+
             '</div>'+
@@ -79,8 +76,8 @@ use yii\widgets\ActiveForm;
 
     function addSemestre(value) {
         var semestre = '<div class="semestre" id="semestre'+value+'">'+
-            '<fieldset>'+
-                '<legend>'+value+'ª semestre: <span style="float: right;" semestre="'+value+'" class="label label-success clicavel add-disciplina" title="Clique para adicionar uma disciplina neste semestre">Adicionar Disciplina <i class="fa fa-plus-circle" aria-hidden="true"></i></span></legend>'+
+
+                '<label>'+value+'ª semestre: &nbsp;<span style="float: right;" semestre="'+value+'" class="label label-success clicavel add-disciplina" title="Clique para adicionar uma disciplina neste semestre"><i class="fa fa-plus-circle" aria-hidden="true"></i> Disciplina</span></label>'+
                 '<div class="row">'+
                     '<div class="col-md-7"><label>Nome Disciplina:</label></div>'+
                     '<div class="col-md-1"><label>CH/T:</label></div>'+
@@ -88,7 +85,7 @@ use yii\widgets\ActiveForm;
                     '<div class="col-md-1"><label>CH/C:</label></div>'+
                 '</div>'+
                 '<div class="disciplinas" id="disciplinas-semestre-'+value+'">'+
-                    '<div class="row">'+
+                    '<div class="row margin-bottom">'+
                         '<div class="col-md-7">'+
                             '<input type="text" class="form-control" name="disciplina" maxlength="100" aria-required="true">'+
                         '</div>'+
@@ -118,7 +115,7 @@ use yii\widgets\ActiveForm;
                         '</div>'+
                     '</div>'+
                 '</div>'+
-            '</fieldset>'+
+
         '<br></div>';
         $('.semestres').append(semestre);
     }
@@ -159,4 +156,7 @@ use yii\widgets\ActiveForm;
     .padding {
         padding: 1px;
     }
+	.margin-bottom {
+		margin-bottom: 7px;
+	}
 </style>
