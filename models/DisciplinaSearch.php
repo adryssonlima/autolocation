@@ -20,6 +20,9 @@ class DisciplinaSearch extends Disciplina
         return [
             [['id', 'curso'], 'integer'],
             [['nome'], 'safe'],
+            [['cht'], 'integer'],
+            [['chp'], 'integer'],
+            [['chc'], 'integer'],
         ];
     }
 

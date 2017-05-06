@@ -9,9 +9,12 @@ use Yii;
  *
  * @property integer $id
  * @property string $nome
+ * @property integer $cht
+ * @property integer $chp
+ * @property integer $chc
  * @property integer $curso
  * @property integer $semestre_ref
- * 
+ *
  * @property Curso $curso0
  * @property Horario[] $horarios
  */
@@ -32,6 +35,9 @@ class Disciplina extends \yii\db\ActiveRecord
     {
         return [
             [['nome', 'curso', 'semestre_ref'], 'required'],
+            [['cht'], 'integer'],
+            [['chp'], 'integer'],
+            [['chc'], 'integer'],
             [['curso'], 'integer'],
             [['semestre_ref'], 'integer'],
             [['nome'], 'string', 'max' => 100],
@@ -47,6 +53,9 @@ class Disciplina extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nome' => 'Nome',
+            'cdt' => 'CHT',
+            'cdp' => 'CHP',
+            'cdc' => 'CHC',
             'curso' => 'Curso',
             'semestre_ref' => 'Semestre Referência',
         ];
