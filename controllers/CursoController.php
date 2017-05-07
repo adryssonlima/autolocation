@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Curso;
+use app\models\Disciplina;
 use app\models\CursoSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -65,13 +66,40 @@ class CursoController extends Controller
     {
         $model = new Curso();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $data = Yii::$app->request->post();
+            //echo"<pre>";die(var_dump($data));
+            $model->nome = $data['Curso']['nome'];
+            $model->qtd_semestre = count($data['Curso']['semestres']);
+            if (!$model->save()) {
+                die('erro ao cadastrar curso');
+            } else if (!$this->createDisciplinas($model->id, $data['Curso']['semestres'])) {
+                die('erro ao cadastrar disciplina');
+            }
             return $this->redirect(['index']);
         } else {
-            return $this->renderAjax('create', [
+            return $this->render('create', [
                 'model' => $model,
             ]);
         }
+    }
+
+    public function createDisciplinas($curso_id, $semestres_disciplinas) {
+        foreach ($semestres_disciplinas as $semestre => $disciplinas) {
+            foreach ($disciplinas['disciplinas'] as $disciplina) {
+                $model = new Disciplina();
+                $model->nome = $disciplina['nome'];
+                $model->cht = $disciplina['cht'];
+                $model->chp = $disciplina['chp'];
+                $model->chc = $disciplina['chc'];
+                $model->curso = $curso_id;
+                $model->semestre_ref = $semestre;
+                if(!$model->save()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**

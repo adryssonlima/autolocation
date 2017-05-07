@@ -22,7 +22,8 @@ $this->title = 'Cursos';
     <div class="row">
         <div class="col-md-12 painel-titulo">
             <div class="col-md-8">
-                <button type="button" class="btn btn-success new"><i class="fa fa-graduation-cap" aria-hidden="true"></i> Novo Curso</button>
+                <!--<button type="button" class="btn btn-success new"><i class="fa fa-graduation-cap" aria-hidden="true"></i> Novo Curso</button>-->
+                <?= Html::a('<i class="fa fa-graduation-cap" aria-hidden="true"></i> Novo Curso', ['create'], ['class' => 'btn btn-success']) ?>
             </div>
             <div class="col-md-4">
                 <?= $this->render('_search', ['model' => $searchModel]); ?>
@@ -72,7 +73,8 @@ $this->title = 'Cursos';
 <?php
 Modal::begin([
     "header" => "<h3 class='modal-titulo'></h3>",
-    "id" => "modal"
+    "id" => "modal",
+    "size" => "modal-lg",
 ]);
 echo "<div class='modal-conteudo'></div>";
 Modal::end();
@@ -80,12 +82,12 @@ Modal::end();
 
 <script>
 
-    $(".new").click(function(){
-        var url = "<?= Yii::$app->request->baseUrl . '/curso/create' ?>";
+    /*$(".new").click(function(){
+        var url = "<?= ''//Yii::$app->request->baseUrl . '/curso/create' ?>";
         var titulo = "<i class='fa fa-graduation-cap' aria-hidden='true'></i> Novo Curso";
-        var csrftoken = "<?= Yii::$app->request->getCsrfToken() ?>";
+        var csrftoken = "<?= ''//Yii::$app->request->getCsrfToken() ?>";
         modalAjax(url, titulo, csrftoken);
-    });
+    });*/
 
     $(".update").click(function(){
         var url = $(this).attr("url");
