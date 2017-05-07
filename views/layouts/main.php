@@ -51,7 +51,6 @@ AppAsset::register($this);
 			['label' => 'Salas', 'url' => ['/sala']],
 			['label' => 'Períodos', 'url' => ['/periodo']],
 			['label' => 'Turmas', 'url' => ['/turma']],
-			['label' => 'Horarios', 'url' => ['/horario']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
