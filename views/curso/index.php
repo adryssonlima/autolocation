@@ -57,10 +57,10 @@ $this->title = 'Cursos';
                     'template' => '{update} {delete}',
                     'buttons' => [
                         'update' => function ($url) {
-                            return "<i class='fa fa-pencil-square-o fa-lg color-green text-primary update clicavel' url='" . $url . "' aria-hidden='true'></i>";
+                            return "<a href='".$url."' title='Editar'><i class='fa fa-pencil-square-o fa-lg text-primary' aria-hidden='true'></i></a>";
                         },
-                        'delete' => function ($id) {
-                            return "<i class='fa fa-trash-o fa-lg delete text-danger clicavel' url='" . $id . "' aria-hidden='true'></i>";
+                        'delete' => function ($url) {
+                            return "<a href='".$url."' title='Excluir'><i class='fa fa-trash-o fa-lg text-danger' aria-hidden='true'></i></a>";
                         }
                     ]
                 ],
@@ -69,38 +69,3 @@ $this->title = 'Cursos';
         ?>
     </div>
 </div>
-
-<?php
-Modal::begin([
-    "header" => "<h3 class='modal-titulo'></h3>",
-    "id" => "modal",
-    "size" => "modal-lg",
-]);
-echo "<div class='modal-conteudo'></div>";
-Modal::end();
-?>
-
-<script>
-
-    /*$(".new").click(function(){
-        var url = "<?= ''//Yii::$app->request->baseUrl . '/curso/create' ?>";
-        var titulo = "<i class='fa fa-graduation-cap' aria-hidden='true'></i> Novo Curso";
-        var csrftoken = "<?= ''//Yii::$app->request->getCsrfToken() ?>";
-        modalAjax(url, titulo, csrftoken);
-    });*/
-
-    $(".update").click(function(){
-        var url = $(this).attr("url");
-        var titulo = "<i class='fa fa-pencil-square-o' aria-hidden='true'></i> Alterar Curso";
-        var csrftoken = "<?= Yii::$app->request->getCsrfToken() ?>";
-        modalAjax(url, titulo, csrftoken);
-    });
-
-    $(".delete").click(function(){
-        var url = $(this).attr("url");
-        var titulo = "<i class='fa fa-trash-o aria-hidden='true'></i> Remover Curso";
-        var csrftoken = "<?= Yii::$app->request->getCsrfToken() ?>";
-        modalAjax(url, titulo, csrftoken);
-    });
-
-</script>

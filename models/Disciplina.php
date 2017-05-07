@@ -76,4 +76,34 @@ class Disciplina extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Horario::className(), ['disciplina' => 'id']);
     }
+
+    /**
+     * Retorna um array com as disciplinas de um curso
+     * setando as que estão relacionadas com alguma turma(horario)
+     */
+    public static function getDisciplinasHorarios($idCurso, $all_disciplinas) {
+        $disciplinas = Yii::$app->db->createCommand(
+        "SELECT
+                d.id
+            FROM
+                cronograma.disciplina AS d
+                    INNER JOIN
+                cronograma.horario AS h ON (d.id = h.disciplina AND d.curso = $idCurso)
+            GROUP BY d.id")->queryAll();
+
+        $result = [];
+
+        foreach ($disciplinas as $key => $value) { //retorna um array simples
+            $result[] = $value['id'];
+        }
+
+        foreach($all_disciplinas as $key => &$value) { //seta as disciplinas que tem relação com alguma turma(horario)
+            $value['horario'] = false;
+            if (in_array($value['id'], $result)) {
+                $value['horario'] = true;
+            }
+        }
+
+        return $all_disciplinas;
+    }
 }

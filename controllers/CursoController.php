@@ -110,15 +110,54 @@ class CursoController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $curso = $this->findModel($id);
+        $all_disciplinas = Disciplina::find()->where(['curso' => $id])->asArray()->all();
+        $disciplinas_set_horarios = Disciplina::getDisciplinasHorarios($id, $all_disciplinas);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($curso->load(Yii::$app->request->post())) {
+            $data = Yii::$app->request->post();
+            $curso->nome = $data['Curso']['nome'];
+            $curso->qtd_semestre = count($data['Curso']['semestres']);
+
+
+            $this->updateDisciplinas($curso->id, $disciplinas_set_horarios, $data['Curso']['semestres']);
+
+            //echo"<pre>";die(var_dump($data['Curso']['semestres']));
+            /*if (!$curso->update()) {
+                die('erro ao cadastrar curso');
+            } else if (!$this->updateDisciplinas($curso->id, $disciplinas_set_horarios, $data['Curso']['semestres'])) {
+                die('erro ao cadastrar disciplina');
+            }*/
+            return $this->redirect(['index']);
+            //echo"<pre>";die(var_dump($curso));
         } else {
-            return $this->renderAjax('update', [
-                'model' => $model,
+            return $this->render('update', [
+                'curso' => $curso,
+                'disciplinas' => json_encode($disciplinas_set_horarios)
             ]);
         }
+    }
+
+    public function updateDisciplinas($curso_id, $old_disciplinas, $semestres_disciplinas) {
+
+        //echo"<pre>";die(var_dump($semestres_disciplinas));
+
+        foreach ($semestres_disciplinas as $semestre => $disciplinas) {
+            foreach ($disciplinas['disciplinas'] as $disciplina) {
+                echo"<pre>";die(var_dump($disciplinas['disciplinas']));
+                $model = new Disciplina();
+                $model->nome = $disciplina['nome'];
+                $model->cht = $disciplina['cht'];
+                $model->chp = $disciplina['chp'];
+                $model->chc = $disciplina['chc'];
+                $model->curso = $curso_id;
+                $model->semestre_ref = $semestre;
+                /*if(!$model->save()) {
+                    return false;
+                }*/
+            }
+        }
+        return true;
     }
 
     /**
@@ -134,7 +173,7 @@ class CursoController extends Controller
             $model->delete();
             return $this->redirect(['index']);
         } else {
-            return $this->renderAjax('delete', [
+            return $this->render('delete', [
                 'model' => $model,
             ]);
         }

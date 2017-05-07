@@ -71,8 +71,9 @@ Modal::end();
 
     function addDisciplina(idSemestre, idDisciplina) {
         var disciplina = '<div class="row margin-bottom" disciplina="'+idDisciplina+'">'+
+            '<input type="hidden" name="Curso[semestres]['+idSemestre+'][disciplinas]['+idDisciplina+'][id]">'+
             '<div class="col-md-8">'+
-                '<input type="text" class="form-control" name="Curso[semestres]['+idSemestre+'][disciplinas]['+idDisciplina+'][nome]" maxlength="100" aria-required="true">'+
+                '<input type="text" class="form-control" name="Curso[semestres]['+idSemestre+'][disciplinas]['+idDisciplina+'][nome]" maxlength="100" aria-required="true" required>'+
             '</div>'+
             '<div class="col-md-1">'+
                 '<select class="form-control padding" name="Curso[semestres]['+idSemestre+'][disciplinas]['+idDisciplina+'][cht]">'+
