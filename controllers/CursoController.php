@@ -118,16 +118,12 @@ class CursoController extends Controller
             $data = Yii::$app->request->post();
             $curso->nome = $data['Curso']['nome'];
             $curso->qtd_semestre = count($data['Curso']['semestres']);
-
-
-            $this->updateDisciplinas($curso->id, $disciplinas_set_horarios, $data['Curso']['semestres']);
-
             //echo"<pre>";die(var_dump($data['Curso']['semestres']));
-            /*if (!$curso->update()) {
+            if (!$curso->save()) {
                 die('erro ao cadastrar curso');
             } else if (!$this->updateDisciplinas($curso->id, $disciplinas_set_horarios, $data['Curso']['semestres'])) {
                 die('erro ao cadastrar disciplina');
-            }*/
+            }
             return $this->redirect(['index']);
             //echo"<pre>";die(var_dump($curso));
         } else {
@@ -140,24 +136,59 @@ class CursoController extends Controller
 
     public function updateDisciplinas($curso_id, $old_disciplinas, $semestres_disciplinas) {
 
-        //echo"<pre>";die(var_dump($semestres_disciplinas));
+        //remove as disciplinas
+        $this->deleteDisciplinas($old_disciplinas, $semestres_disciplinas);
 
         foreach ($semestres_disciplinas as $semestre => $disciplinas) {
             foreach ($disciplinas['disciplinas'] as $disciplina) {
-                echo"<pre>";die(var_dump($disciplinas['disciplinas']));
-                $model = new Disciplina();
-                $model->nome = $disciplina['nome'];
-                $model->cht = $disciplina['cht'];
-                $model->chp = $disciplina['chp'];
-                $model->chc = $disciplina['chc'];
-                $model->curso = $curso_id;
-                $model->semestre_ref = $semestre;
-                /*if(!$model->save()) {
-                    return false;
-                }*/
+                //echo"<pre>";die(var_dump($disciplinas['disciplinas']));
+
+                if (($model = Disciplina::findOne($disciplina['id'])) !== null) { //update nas disciplinas existentes
+                    $model->nome = $disciplina['nome'];
+                    $model->cht = $disciplina['cht'];
+                    $model->chp = $disciplina['chp'];
+                    $model->chc = $disciplina['chc'];
+                    $model->curso = $curso_id;
+                    $model->semestre_ref = $semestre;
+                    if(!$model->save()) {
+                        return false;
+                    }
+                } else if ($disciplina['id'] == "") { //cria as novas disciplinas
+                    $model = new Disciplina;
+                    $model->nome = $disciplina['nome'];
+                    $model->cht = $disciplina['cht'];
+                    $model->chp = $disciplina['chp'];
+                    $model->chc = $disciplina['chc'];
+                    $model->curso = $curso_id;
+                    $model->semestre_ref = $semestre;
+                    if(!$model->save()) {
+                        return false;
+                    }
+                }
             }
         }
         return true;
+    }
+
+    public function deleteDisciplinas($old_disciplinas, $semestres_disciplinas) {
+        foreach ($semestres_disciplinas as $semestre => $disciplinas) {
+            //echo"<pre>";die(var_dump($disciplinas['disciplinas']));
+            foreach ($old_disciplinas as $key => $value) {
+                if (!($value['horario']) && !($this->is_array_mult($value['id'], $disciplinas['disciplinas']))) {
+                    $model = Disciplina::findOne($value['id']);
+                    $model->delete();
+                }
+            }
+        }
+    }
+
+    public function is_array_mult($id, $array_disciplinas) {
+        foreach ($array_disciplinas as $key => $value) {
+            if ($id == $value['id']) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
