@@ -35,7 +35,8 @@ use yii\bootstrap\Modal;
 
     <br>
     <div class="semestres">
-
+        <div id="semestres-excluidos"></div>
+        <div id="disciplinas-excluidas"></div>
     </div>
 
     <br><br>
@@ -71,7 +72,7 @@ Modal::end();
 
     function addDisciplina(idSemestre, idDisciplina) {
         var disciplina = '<div class="row margin-bottom" disciplina="'+idDisciplina+'">'+
-            '<input type="hidden" name="Curso[semestres]['+idSemestre+'][disciplinas]['+idDisciplina+'][id]">'+
+            '<input type="hidden" name="Curso[semestres]['+idSemestre+'][disciplinas]['+idDisciplina+'][id]" />'+
             '<div class="col-md-8">'+
                 '<input type="text" class="form-control" name="Curso[semestres]['+idSemestre+'][disciplinas]['+idDisciplina+'][nome]" maxlength="100" aria-required="true" required>'+
             '</div>'+
@@ -97,7 +98,7 @@ Modal::end();
                 '</select>'+
             '</div>'+
             '<div class="col-md-1">'+
-                '<span class="pull-right clicavel rm-disciplina" title="Remover Disciplina"><i class="fa fa-minus-circle fa-2x text-danger" aria-hidden="true"></i></span>'+
+                '<span semestre="'+idSemestre+'" disciplina="'+idDisciplina+'" class="pull-right clicavel rm-disciplina" title="Remover Disciplina"><i class="fa fa-minus-circle fa-2x text-danger" aria-hidden="true"></i></span>'+
             '</div>'+
         '<br></div>';
         $('#disciplinas-semestre-'+idSemestre).append(disciplina);
@@ -105,7 +106,7 @@ Modal::end();
 
     function addSemestre(value) {
         var semestre = '<div class="semestre" id="semestre'+value+'">'+
-                '<input type="hidden" name="Curso[semestres]['+value+']">'+
+                '<input type="hidden" name="Curso[semestres]['+value+']" />'+
                 '<label>'+value+'ª semestre: &nbsp;<span semestre="'+value+'" disciplina="2" class="label label-success clicavel add-disciplina" title="Clique para adicionar uma disciplina neste semestre"><i class="fa fa-plus-circle" aria-hidden="true"></i> Disciplina</span></label>'+
                 '<div class="row">'+
                     '<div class="col-md-8"><label>Nome Disciplina:</label></div>'+
@@ -152,7 +153,6 @@ Modal::end();
     });
 
     $(".semestres").on("click", ".add-disciplina", function() {
-        console.log("add Disciplina");
         var idSemestre = $(this).attr('semestre');
         var idDisciplina = $(this).attr('disciplina');
         addDisciplina(idSemestre, idDisciplina);
@@ -161,7 +161,10 @@ Modal::end();
     });
 
     $(".semestres").on("click", ".rm-disciplina", function() {
-        console.log("rm Disciplina");
+        var semestre = $(this).attr('semestre');
+        var disciplina = $(this).attr('disciplina');
+        var idDisciplina = $(this).closest('.row').find('input[name="Curso[semestres]['+semestre+'][disciplinas]['+disciplina+'][id]"]').val();
+        $("#disciplinas-excluidas").append('<input type="hidden" name="Curso[removidas][]" value="'+idDisciplina+'" />');
         $(this).closest('.row').remove();
     });
 

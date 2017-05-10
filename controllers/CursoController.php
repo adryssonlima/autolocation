@@ -86,18 +86,21 @@ class CursoController extends Controller
 
     public function createDisciplinas($curso_id, $semestres_disciplinas) {
         foreach ($semestres_disciplinas as $semestre => $disciplinas) {
-            foreach ($disciplinas['disciplinas'] as $disciplina) {
-                $model = new Disciplina();
-                $model->nome = $disciplina['nome'];
-                $model->cht = $disciplina['cht'];
-                $model->chp = $disciplina['chp'];
-                $model->chc = $disciplina['chc'];
-                $model->curso = $curso_id;
-                $model->semestre_ref = $semestre;
-                if(!$model->save()) {
-                    return false;
+            if ($disciplinas != "") {
+                foreach ($disciplinas['disciplinas'] as $disciplina) {
+                    $model = new Disciplina();
+                    $model->nome = $disciplina['nome'];
+                    $model->cht = $disciplina['cht'];
+                    $model->chp = $disciplina['chp'];
+                    $model->chc = $disciplina['chc'];
+                    $model->curso = $curso_id;
+                    $model->semestre_ref = $semestre;
+                    if(!$model->save()) {
+                        return false;
+                    }
                 }
             }
+
         }
         return true;
     }
@@ -118,12 +121,15 @@ class CursoController extends Controller
             $data = Yii::$app->request->post();
             $curso->nome = $data['Curso']['nome'];
             $curso->qtd_semestre = count($data['Curso']['semestres']);
+
+            $this->updateCurso($curso->id, $data['Curso']);
+
             //echo"<pre>";die(var_dump($data['Curso']['semestres']));
-            if (!$curso->save()) {
+            /*if (!$curso->save()) {
                 die('erro ao cadastrar curso');
-            } else if (!$this->updateDisciplinas($curso->id, $disciplinas_set_horarios, $data['Curso']['semestres'])) {
+            } else if (!$this->updateCurso($curso->id, $data['Curso'])) {
                 die('erro ao cadastrar disciplina');
-            }
+            }*/
             return $this->redirect(['index']);
             //echo"<pre>";die(var_dump($curso));
         } else {
@@ -134,61 +140,88 @@ class CursoController extends Controller
         }
     }
 
-    public function updateDisciplinas($curso_id, $old_disciplinas, $semestres_disciplinas) {
+    public function updateCurso($curso_id, $data) {
 
-        //remove as disciplinas
-        $this->deleteDisciplinas($old_disciplinas, $semestres_disciplinas);
+        //metodos para inclusão de semestres
+        //metodo para exclusão de semestres
 
-        foreach ($semestres_disciplinas as $semestre => $disciplinas) {
-            foreach ($disciplinas['disciplinas'] as $disciplina) {
-                //echo"<pre>";die(var_dump($disciplinas['disciplinas']));
+        echo"<pre>";die(var_dump($data));
 
-                if (($model = Disciplina::findOne($disciplina['id'])) !== null) { //update nas disciplinas existentes
-                    $model->nome = $disciplina['nome'];
-                    $model->cht = $disciplina['cht'];
-                    $model->chp = $disciplina['chp'];
-                    $model->chc = $disciplina['chc'];
-                    $model->curso = $curso_id;
-                    $model->semestre_ref = $semestre;
-                    if(!$model->save()) {
-                        return false;
-                    }
-                } else if ($disciplina['id'] == "") { //cria as novas disciplinas
-                    $model = new Disciplina;
-                    $model->nome = $disciplina['nome'];
-                    $model->cht = $disciplina['cht'];
-                    $model->chp = $disciplina['chp'];
-                    $model->chc = $disciplina['chc'];
-                    $model->curso = $curso_id;
-                    $model->semestre_ref = $semestre;
-                    if(!$model->save()) {
-                        return false;
+        if ( isset($data['removidas']) ) {
+            if ( !$this->removeDisciplinas($data['removidas']) ) {
+                return false;
+            }
+        }
+        if ( !$this->updateDisciplinas($curso_id, $data['semestres']) ) {
+            return false;
+        }
+
+        if ( !$this->createDisciplina($curso_id, $data['semestres']) ) {
+            return false;
+        }
+
+        return true;
+
+    }
+    /*
+     * Remoção de disciplinas
+     */
+    private function removeDisciplinas($disciplinas) {
+        foreach($disciplinas as $id) {
+            if (($model = Disciplina::findOne($id)) !== null) {
+                if(!$model->delete()){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    /*
+     * Update de disciplinas
+     */
+    private function updateDisciplinas($curso_id, $semestres) {
+        foreach ($semestres as $semestre => $disciplinas) {
+            if ($disciplinas != "") {
+                foreach ($disciplinas['disciplinas'] as $disciplina) {
+                    if ( ($model = Disciplina::findOne($disciplina['id'])) !== null ) {
+                        $model->nome = $disciplina['nome'];
+                        $model->cht = $disciplina['cht'];
+                        $model->chp = $disciplina['chp'];
+                        $model->chc = $disciplina['chc'];
+                        $model->curso = $curso_id;
+                        $model->semestre_ref = $semestre;
+                        if(!$model->save()) {
+                            return false;
+                        }
                     }
                 }
             }
         }
         return true;
     }
-
-    public function deleteDisciplinas($old_disciplinas, $semestres_disciplinas) {
-        foreach ($semestres_disciplinas as $semestre => $disciplinas) {
-            //echo"<pre>";die(var_dump($disciplinas['disciplinas']));
-            foreach ($old_disciplinas as $key => $value) {
-                if (!($value['horario']) && !($this->is_array_mult($value['id'], $disciplinas['disciplinas']))) {
-                    $model = Disciplina::findOne($value['id']);
-                    $model->delete();
+    /*
+     * Criação de disciplinas
+     */
+    private function createDisciplina($curso_id, $semestres) {
+        foreach ($semestres as $semestre => $disciplinas) {
+            if ($disciplinas != "") {
+                foreach ($disciplinas['disciplinas'] as $disciplina) {
+                    if ($disciplina['id'] == "") {
+                        $model = new Disciplina;
+                        $model->nome = $disciplina['nome'];
+                        $model->cht = $disciplina['cht'];
+                        $model->chp = $disciplina['chp'];
+                        $model->chc = $disciplina['chc'];
+                        $model->curso = $curso_id;
+                        $model->semestre_ref = $semestre;
+                        if(!$model->save()) {
+                            return false;
+                        }
+                    }
                 }
             }
         }
-    }
-
-    public function is_array_mult($id, $array_disciplinas) {
-        foreach ($array_disciplinas as $key => $value) {
-            if ($id == $value['id']) {
-                return true;
-            }
-        }
-        return false;
+        return true;
     }
 
     /**
