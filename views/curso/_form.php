@@ -135,13 +135,15 @@ Modal::end();
 
     $(".rm-semestre").click(function() {
         var value = $(this).attr('value');
-        $(".modal-titulo").html('Remover ' + value + 'ª Semestre?');
-        $(".rm-semestre-confirm").val(value);
-        $("#modal").modal("show");
+        removeSemestre(value);
     });
 
     $(".rm-semestre-confirm").click(function() {
         var value = $(this).attr('value');
+        var disciplinas_removidas = $('#disciplinas-semestre-'+value).find(':hidden').serializeArray();
+        $.each(disciplinas_removidas, function(index, value) { //Adiciona as disciplinas desse semestre na tag de excluídas
+            $("#disciplinas-excluidas").append('<input type="hidden" name="Curso[removidas][]" value="'+value['value']+'" />');
+        });
         $('#semestre'+value).remove();
         $(".add-semestre").attr('value', value);
         value--;
@@ -167,6 +169,21 @@ Modal::end();
         $("#disciplinas-excluidas").append('<input type="hidden" name="Curso[removidas][]" value="'+idDisciplina+'" />');
         $(this).closest('.row').remove();
     });
+
+    function removeSemestre(value) {
+        //verifica se no ultimo semestre existem disciplinas que não podem ser removidas
+        var disciplinasNotRemove = $("#disciplinas-semestre-"+value).find('.remove-disable').attr('class');
+        if (typeof disciplinasNotRemove != "undefined") {
+            $(".modal-titulo").html('Não é possível remover o ' + value + 'ª Semestre!');
+            $(".modal-conteudo").html("<p><i class='fa fa-exclamation-triangle fa-2x' aria-hidden='true'></i><br>Existe uma ou mais turmas cursando alguma disciplina desse semestre.</p>");
+            $(".rm-semestre-confirm").prop('disabled', true);
+            $("#modal").modal("show");
+        } else {
+            $(".modal-titulo").html('Remover ' + value + 'ª Semestre?');
+            $(".rm-semestre-confirm").val(value);
+            $("#modal").modal("show");
+        }
+    }
 
 </script>
 

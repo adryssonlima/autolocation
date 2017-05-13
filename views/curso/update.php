@@ -23,9 +23,10 @@ $this->title = 'Editando o Curso: ' . '<span class="aviso">' . $curso->nome . '<
 
 <script>
 
+    var qtd_semestre = '<?= $curso->qtd_semestre ?>';
+    var disciplinas = $.parseJSON('<?= $disciplinas ?>');
+
     $(document).ready(function(){
-        var qtd_semestre = '<?= $curso->qtd_semestre ?>';
-        var disciplinas = $.parseJSON('<?= $disciplinas ?>');
         //console.log(disciplinas);
         if (qtd_semestre) {
             $(".rm-semestre").removeClass('hidden');
@@ -49,7 +50,7 @@ $this->title = 'Editando o Curso: ' . '<span class="aviso">' . $curso->nome . '<
                     $("select[name='Curso[semestres]["+idSemestre+"][disciplinas]["+idDisciplina+"][chc]']").val(value['chc']);
                     if (value['horario']) { //faz o tratamento caso a disciplina esteja referenciada a uma turma
                         $("#disciplinas-semestre-"+idSemestre).find("div[disciplina='"+idDisciplina+"']").find(':input').prop('disabled', true);
-                        $("#disciplinas-semestre-"+idSemestre).find("div[disciplina='"+idDisciplina+"']").find('span').removeClass('clicavel rm-disciplina').attr('title', 'Existe uma ou mais turmas cursando essa disciplina').find('i').removeClass('fa-minus-circle').addClass('fa-exclamation-triangle');
+                        $("#disciplinas-semestre-"+idSemestre).find("div[disciplina='"+idDisciplina+"']").find('span').removeClass('clicavel rm-disciplina').attr('title', 'Existe uma ou mais turmas cursando essa disciplina').find('i').removeClass('fa-minus-circle').addClass('fa-exclamation-triangle remove-disable');
                     }
                 }
             });

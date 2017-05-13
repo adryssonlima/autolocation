@@ -121,17 +121,12 @@ class CursoController extends Controller
             $data = Yii::$app->request->post();
             $curso->nome = $data['Curso']['nome'];
             $curso->qtd_semestre = count($data['Curso']['semestres']);
-
-            $this->updateCurso($curso->id, $data['Curso']);
-
-            //echo"<pre>";die(var_dump($data['Curso']['semestres']));
-            /*if (!$curso->save()) {
+            if (!$curso->save()) {
                 die('erro ao cadastrar curso');
             } else if (!$this->updateCurso($curso->id, $data['Curso'])) {
                 die('erro ao cadastrar disciplina');
-            }*/
+            }
             return $this->redirect(['index']);
-            //echo"<pre>";die(var_dump($curso));
         } else {
             return $this->render('update', [
                 'curso' => $curso,
@@ -142,16 +137,12 @@ class CursoController extends Controller
 
     public function updateCurso($curso_id, $data) {
 
-        //metodos para inclusão de semestres
-        //metodo para exclusão de semestres
-
-        echo"<pre>";die(var_dump($data));
-
         if ( isset($data['removidas']) ) {
             if ( !$this->removeDisciplinas($data['removidas']) ) {
                 return false;
             }
         }
+
         if ( !$this->updateDisciplinas($curso_id, $data['semestres']) ) {
             return false;
         }
