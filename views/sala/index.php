@@ -14,7 +14,7 @@ $this->title = 'Salas';
 <div class="sala-index">
 
     <div class="row">
-        <h1 style="float:left;"><i class="fa fa-book" aria-hidden="true"></i> <?= Html::encode($this->title) ?></span>
+        <h1 style="float:left;"><i class="fa fa-location-arrow" aria-hidden="true"></i> <?= Html::encode($this->title) ?></span>
     </div>
 
     <br>
@@ -22,7 +22,7 @@ $this->title = 'Salas';
     <div class="row">
         <div class="col-md-12 painel-titulo">
             <div class="col-md-8">
-                <button type="button" class="btn btn-success new"><i class="fa fa-book" aria-hidden="true"></i> Nova Sala</button>
+                <button type="button" class="btn btn-success new"><i class="fa fa-location-arrow" aria-hidden="true"></i> Nova Sala</button>
             </div>
             <div class="col-md-4">
                 <?= $this->render('_search', ['model' => $searchModel]); ?>
@@ -82,7 +82,7 @@ Modal::end();
 
     $(".new").click(function(){
         var url = "<?= Yii::$app->request->baseUrl . '/sala/create' ?>";
-        var titulo = "<i class='fa fa-graduation-cap' aria-hidden='true'></i> Nova Sala";
+        var titulo = "<i class='fa fa-location-arrow' aria-hidden='true'></i> Nova Sala";
         var csrftoken = "<?= Yii::$app->request->getCsrfToken() ?>";
         modalAjax(url, titulo, csrftoken);
     });

@@ -12,7 +12,7 @@ $this->title = 'Criar Curso';
 ?>
 <div class="curso-create">
 
-    <h1><i class="fa fa-graduation-cap" aria-hidden="true"></i> <?= Html::encode($this->title) ?></h1>
+    <h1><i class="fa fa-university" aria-hidden="true"></i> <?= Html::encode($this->title) ?></h1>
     <br>
     <?= $this->render('_form', [
         'model' => $model,

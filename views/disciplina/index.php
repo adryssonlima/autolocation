@@ -90,7 +90,7 @@ Modal::end();
 
     $(".new").click(function(){
         var url = "<?= Yii::$app->request->baseUrl . '/disciplina/create' ?>";
-        var titulo = "<i class='fa fa-graduation-cap' aria-hidden='true'></i> Nova Disciplina";
+        var titulo = "<i class='fa fa-book' aria-hidden='true'></i> Nova Disciplina";
         var csrftoken = "<?= Yii::$app->request->getCsrfToken() ?>";
         modalAjax(url, titulo, csrftoken);
     });

@@ -14,7 +14,7 @@ $this->title = 'Cursos';
 <div class="curso-index">
 
     <div class="row">
-        <h1 style="float:left;"><i class="fa fa-graduation-cap" aria-hidden="true"></i> <?= Html::encode($this->title) ?></span>
+        <h1 style="float:left;"><i class="fa fa-university" aria-hidden="true"></i> <?= Html::encode($this->title) ?></span>
     </div>
 
     <br>
@@ -23,7 +23,7 @@ $this->title = 'Cursos';
         <div class="col-md-12 painel-titulo">
             <div class="col-md-8">
                 <!--<button type="button" class="btn btn-success new"><i class="fa fa-graduation-cap" aria-hidden="true"></i> Novo Curso</button>-->
-                <?= Html::a('<i class="fa fa-graduation-cap" aria-hidden="true"></i> Novo Curso', ['create'], ['class' => 'btn btn-success']) ?>
+                <?= Html::a('<i class="fa fa-university" aria-hidden="true"></i> Novo Curso', ['create'], ['class' => 'btn btn-success']) ?>
             </div>
             <div class="col-md-4">
                 <?= $this->render('_search', ['model' => $searchModel]); ?>
