@@ -14,6 +14,7 @@ AppAsset::register($this);
 
 ?>
 <?php $this->beginPage() ?>
+
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 <head>
@@ -41,23 +42,25 @@ AppAsset::register($this);
         ],
     ]);
     echo Nav::widget([
+		'encodeLabels' => false,
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
+            ['label' => '<i class="fa fa-table" aria-hidden="true"></i>&nbsp;Painel de Turmas', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-			['label' => 'Cursos', 'url' => ['/curso']],
-			['label' => 'Disciplinas', 'url' => ['/disciplina']],
-			['label' => 'Salas', 'url' => ['/sala']],
-			['label' => 'Períodos', 'url' => ['/periodo']],
-			['label' => 'Turmas', 'url' => ['/turma']],
+            //['label' => 'Contact', 'url' => ['/site/contact']],
+			['label' => '<i class="fa fa-university" aria-hidden="true"></i>&nbsp;Cursos', 'url' => ['/curso']],
+			['label' => '<i class="fa fa-book" aria-hidden="true"></i>&nbsp;Disciplinas', 'url' => ['/disciplina']],
+			['label' => '<i class="fa fa-location-arrow" aria-hidden="true"></i>&nbsp;Salas', 'url' => ['/sala']],
+			['label' => '<i class="fa fa-clock-o" aria-hidden="true"></i>&nbsp;Períodos', 'url' => ['/periodo']],
+			['label' => '<i class="fa fa-graduation-cap" aria-hidden="true"></i>&nbsp;Turmas', 'url' => ['/turma']],
+			['label' => '<i class="fa fa-user-circle" aria-hidden="true"></i>&nbsp;Usuários do Sistema', 'url' => ['/usuario']],
             Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
+                ['label' => '<i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;Login', 'url' => ['/site/login']]
             ) : (
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post')
                 . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
+                    '<i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;Sair (' . Yii::$app->user->identity->nome . ')',
                     ['class' => 'btn btn-link logout']
                 )
                 . Html::endForm()
