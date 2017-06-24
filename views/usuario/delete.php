@@ -21,6 +21,7 @@ $this->params['breadcrumbs'][] = 'Usuario';
 </div>
 
 <script>
+    $('.password-confirm').addClass('hidden');
     $('.usuario-form').find(':input').prop('disabled', true);
     $('.acoes').find(':input').prop('disabled', false);
     $('.aplicar').addClass('btn btn-danger');

@@ -22,9 +22,9 @@ use yii\helpers\ArrayHelper;
             <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-6">
-            <label class="control-label" for="usuario-password-confirm">Confirmar Senha</label>
-            <input type="password" id="usuario-password-confirm" class="form-control" maxlength="80" aria-required="true">
-            <div class="flag hidden">Senhas diferentes</div>
+            <label class="control-label password-confirm" for="usuario-password-confirm">Confirmar Senha</label>
+            <input type="password" id="usuario-password-confirm" class="form-control password-confirm" maxlength="80" aria-required="true">
+            <div class="flag flag-pass hidden">Senhas diferentes!</div>
         </div>
     </div>
 
@@ -50,31 +50,59 @@ use yii\helpers\ArrayHelper;
 
 <script>
 
+    $('.field-usuario-email').find('.help-block').removeClass('help-block').addClass('flag flag-email hidden').text('Email inválido!');
+
     $("#submit").click(function(event){
         event.preventDefault();
-        let pass = $("#usuario-password").val();
-        let passconfirm = $("#usuario-password-confirm").val();
-        if (pass == passconfirm) {
-            $(".flag").addClass('hidden');
-            $.ajax({
-                url: '<?= Yii::$app->request->baseUrl . '/usuario/create' ?>',
-                type: 'post',
-                data: {
-                    nome: $("#usuario-nome").val(),
-                    email: $("#usuario-email").val(),
-                    senha: $("#usuario-password").val(),
-                    tipo: $("#usuario-tipo option:selected").val()
-                },
-                success: function (data) {
-                    console.log(data);
-                },
-                error: function () {
-                    console.log("Erro ao submeter requisição Ajax");
-                }
-            });
-        } else {
-            $(".flag").removeClass('hidden');
+        if ( $('.remover-bnt-confirmar').val() == 'true' ) {
+            let action = '/usuario/delete?id=' + '<?= $model->id ?>';
+            reqAjax(action);
+        } else if ( validateEmail() && validatePass() ) {
+            let action = '<?= $model->isNewRecord ? '/usuario/create' : '/usuario/update?id='.$model->id ?>';
+            reqAjax(action);
         }
     });
+
+    function reqAjax(action) {
+        $.ajax({
+            url: '<?= Yii::$app->request->baseUrl ?>'+action,
+            type: 'post',
+            data: {
+                nome: $("#usuario-nome").val(),
+                email: $("#usuario-email").val(),
+                password: $("#usuario-password").val(),
+                tipo: $("#usuario-tipo option:selected").val()
+            },
+            success: function (data) {
+                console.log(data);
+            },
+            error: function () {
+                console.log("Erro ao submeter requisição Ajax");
+            }
+        });
+    }
+
+    function validateEmail() {
+        var email = $("#usuario-email").val();
+        var atpos = email.indexOf("@");
+        var dotpos = email.lastIndexOf(".");
+        if (atpos<1 || dotpos<atpos+2 || dotpos+2>=email.length) {
+            $(".flag-email").removeClass('hidden');
+            return false;
+        }
+        $(".flag-email").addClass('hidden');
+        return true;
+    }
+
+    function validatePass() {
+        let pass = $("#usuario-password").val();
+        let passconfirm = $("#usuario-password-confirm").val();
+        if (pass != passconfirm) {
+            $(".flag-pass").removeClass('hidden');
+            return false;
+        }
+        $(".flag-pass").addClass('hidden');
+        return true;
+    }
 
 </script>

@@ -75,12 +75,10 @@ class UsuarioController extends Controller
     {
         $model = new Usuario();
         
-        if ($model->load(Yii::$app->request->post())) {
-            echo "<pre>"; die('ola');
-            die(var_dump(Yii::$app->request->post()));
+        if (Yii::$app->request->post('email')) {
             $model->nome = Yii::$app->request->post('nome');
             $model->email = Yii::$app->request->post('email');
-            $model->password = Yii::$app->request->post('senha');
+            $model->password = Yii::$app->request->post('password');
             $model->tipo = Yii::$app->request->post('tipo');
             $model->save();
             return $this->redirect(['index']);
@@ -89,6 +87,7 @@ class UsuarioController extends Controller
                 'model' => $model,
             ]);
         }
+        
     }
 
     /**
@@ -101,7 +100,12 @@ class UsuarioController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if (Yii::$app->request->post('email')) {
+            $model->nome = Yii::$app->request->post('nome');
+            $model->email = Yii::$app->request->post('email');
+            $model->password = Yii::$app->request->post('password');
+            $model->tipo = Yii::$app->request->post('tipo');
+            $model->save();
             return $this->redirect(['index']);
         } else {
             return $this->renderAjax('update', [
@@ -117,9 +121,10 @@ class UsuarioController extends Controller
      * @return mixed
      */
     public function actionDelete($id) {
+        
         $model = $this->findModel($id);
 
-        if (Yii::$app->request->post("remover")) {
+        if (Yii::$app->request->post("email")) {
             $model->delete();
             return $this->redirect(['index']);
         } else {
