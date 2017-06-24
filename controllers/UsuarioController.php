@@ -74,11 +74,18 @@ class UsuarioController extends Controller
     public function actionCreate()
     {
         $model = new Usuario();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        
+        if ($model->load(Yii::$app->request->post())) {
+            echo "<pre>"; die('ola');
+            die(var_dump(Yii::$app->request->post()));
+            $model->nome = Yii::$app->request->post('nome');
+            $model->email = Yii::$app->request->post('email');
+            $model->password = Yii::$app->request->post('senha');
+            $model->tipo = Yii::$app->request->post('tipo');
+            $model->save();
+            return $this->redirect(['index']);
         } else {
-            return $this->render('create', [
+            return $this->renderAjax('create', [
                 'model' => $model,
             ]);
         }
@@ -95,9 +102,9 @@ class UsuarioController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
-            return $this->render('update', [
+            return $this->renderAjax('update', [
                 'model' => $model,
             ]);
         }
@@ -109,11 +116,17 @@ class UsuarioController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
+    public function actionDelete($id) {
+        $model = $this->findModel($id);
 
-        return $this->redirect(['index']);
+        if (Yii::$app->request->post("remover")) {
+            $model->delete();
+            return $this->redirect(['index']);
+        } else {
+            return $this->renderAjax('delete', [
+                'model' => $model,
+            ]);
+        }
     }
 
     /**

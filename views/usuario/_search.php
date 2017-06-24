@@ -15,20 +15,27 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <div class="row">
+        <div class="input-group">
+            <input type="nome" id="uauariosearch-nome" class="form-control" name="UsuarioSearch[nome]" value="" placeholder="Buscar usuário...">
+            <span class="input-group-btn"><?= Html::submitButton("<i class='fa fa-search' aria-hidden='true'></i>", ['class' => 'btn btn-primary']) ?></span>
+        </div>
+    </div>
 
-    <?= $form->field($model, 'nome') ?>
+    <?= ''//$form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'email') ?>
+    <?= ''//$form->field($model, 'nome') ?>
 
-    <?= $form->field($model, 'password') ?>
+    <?= ''//$form->field($model, 'email') ?>
+
+    <?= ''//$form->field($model, 'password') ?>
 
     <?php // echo $form->field($model, 'tipo') ?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
-    </div>
+    <!--<div class="form-group">
+        <?= ''//Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+        <?= ''//Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+    </div>-->
 
     <?php ActiveForm::end(); ?>
 
