@@ -25,6 +25,7 @@ AppAsset::register($this);
     <script src="<?= Yii::$app->request->baseUrl ?>/web/js/vue.min.js"></script>
     <link rel="stylesheet" href="<?= Yii::$app->request->baseUrl ?>/web/css/style-wizard-circular.css">
     <link rel="stylesheet" href="<?= Yii::$app->request->baseUrl ?>/web/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
@@ -35,7 +36,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'Auto Location',
+        'brandLabel' => 'Class Location',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -46,7 +47,7 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => '<i class="fa fa-table" aria-hidden="true"></i>&nbsp;Painel de Turmas', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
+            //['label' => 'About', 'url' => ['/site/about']],
             //['label' => 'Contact', 'url' => ['/site/contact']],
 			['label' => '<i class="fa fa-university" aria-hidden="true"></i>&nbsp;Cursos', 'url' => ['/curso']],
 			['label' => '<i class="fa fa-book" aria-hidden="true"></i>&nbsp;Disciplinas', 'url' => ['/disciplina']],
@@ -82,9 +83,9 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; Auto Location <?= date('Y') ?></p>
+        <p class="pull-left">&copy; Class Location <?= date('Y') ?></p>
 
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <p class="pull-right"><a class="link-style" href="<?= Yii::$app->request->baseUrl ?>/site/about" ><i class="fa fa-info-circle" aria-hidden="true"></i> Sobre o Class Location</a> </p>
     </div>
 </footer>
 
@@ -92,3 +93,14 @@ AppAsset::register($this);
 </body>
 </html>
 <?php $this->endPage() ?>
+
+<style>
+
+    .link-style {
+        text-decoration: none;
+    }
+    .link-style:hover {
+        text-decoration: none;
+    }
+
+</style>
