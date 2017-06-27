@@ -60,9 +60,27 @@ $this->title = 'Disciplinas';
                   'value' => 'semestre_ref',
                   'enableSorting' => false,
                 ],
+                [
+                  'attribute' => 'cht',
+                  'value' => 'cht',
+                  'enableSorting' => false,
+                ],
+                [
+                  'attribute' => 'chp',
+                  'value' => 'chp',
+                  'enableSorting' => false,
+                ],
+                [
+                  'attribute' => 'chc',
+                  'value' => 'chc',
+                  'enableSorting' => false,
+                ],
                 ['class' => 'yii\grid\ActionColumn',
-                    'template' => '{update} {delete}',
+                    'template' => '{view} {update} {delete}',
                     'buttons' => [
+                        'view' => function ($url) {
+                            return "<i class='fa fa-eye fa-lg color-green text-success view clicavel' url='" . $url . "' aria-hidden='true'></i>";
+                        },
                         'update' => function ($url) {
                             return "<i class='fa fa-pencil-square-o fa-lg color-green text-primary update clicavel' url='" . $url . "' aria-hidden='true'></i>";
                         },
@@ -91,6 +109,13 @@ Modal::end();
     $(".new").click(function(){
         var url = "<?= Yii::$app->request->baseUrl . '/disciplina/create' ?>";
         var titulo = "<i class='fa fa-book' aria-hidden='true'></i> Nova Disciplina";
+        var csrftoken = "<?= Yii::$app->request->getCsrfToken() ?>";
+        modalAjax(url, titulo, csrftoken);
+    });
+
+    $(".view").click(function(){
+        var url = $(this).attr("url");
+        var titulo = "<i class='fa fa-eye' aria-hidden='true'></i> Visualizar Disciplina";
         var csrftoken = "<?= Yii::$app->request->getCsrfToken() ?>";
         modalAjax(url, titulo, csrftoken);
     });

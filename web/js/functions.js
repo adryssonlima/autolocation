@@ -19,7 +19,7 @@ function modalAjax(url, titulo, csrftoken) {
 }
 
 //Function para pegar os semestres de um curso especícifo. Usado pela page disciplina.
-function getSemestres(url, curso, csrftoken) {
+function getSemestres(url, curso, semestreDisciplina, csrftoken) {
     $.ajax({
         url: url,
         type: 'post',
@@ -33,6 +33,7 @@ function getSemestres(url, curso, csrftoken) {
             for (i = 1; i <= data; i++) {
                 $("#disciplina-semestre_ref").append($("<option></option>").attr("value", i).text(i));
             }
+            $("#disciplina-semestre_ref").val(semestreDisciplina).change();
         },
         error: function () {
             console.log("Erro ao submeter requisição Ajax");

@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = 'Delete';
 
     $( document ).ready(function($) {
         var curso = $(' #disciplina-curso option:checked' ).val();
-        getSemestres(url, curso, csrftoken);
-        $("#disciplina-semestre_ref").val("<?= $model->semestre_ref ?>");
+        var semestreDisciplina = "<?= $model->semestre_ref ?>";
+        getSemestres(url, curso, semestreDisciplina, csrftoken);
     });
 </script>

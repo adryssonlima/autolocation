@@ -27,13 +27,13 @@ $this->params['breadcrumbs'][] = 'Update';
 
     $( document ).ready(function($) {
         var curso = $(' #disciplina-curso option:checked' ).val();
-        getSemestres(url, curso, csrftoken);
-        $("#disciplina-semestre_ref").val("<?= $model->semestre_ref ?>").change();
+        var semestreDisciplina = "<?= $model->semestre_ref ?>";
+        getSemestres(url, curso, semestreDisciplina, csrftoken);
     });
 
     $('#disciplina-curso').on('change', function (e) {
         curso = $(this).val();
-        getSemestres(url, curso, csrftoken);
+        getSemestres(url, curso, 1, csrftoken);
     });
 
 </script>

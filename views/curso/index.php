@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\bootstrap\Modal;
+use app\models\Disciplina;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\CursoSearch */
@@ -54,13 +55,22 @@ $this->title = 'Cursos';
                   'enableSorting' => false,
                 ],
                 ['class' => 'yii\grid\ActionColumn',
-                    'template' => '{update} {delete}',
+                    'template' => '{view} {update} {delete}',
                     'buttons' => [
+                        'view' => function ($url) {
+                            return "<a href='".$url."' title='Visualizar'><i class='fa fa-eye fa-lg <text-success></text-success>' aria-hidden='true'></i></a>";
+                        },
                         'update' => function ($url) {
                             return "<a href='".$url."' title='Editar'><i class='fa fa-pencil-square-o fa-lg text-primary' aria-hidden='true'></i></a>";
                         },
                         'delete' => function ($url) {
-                            return "<a href='".$url."' title='Excluir'><i class='fa fa-trash-o fa-lg text-danger' aria-hidden='true'></i></a>";
+                            $id = preg_replace("/[^0-9]/", "", $url);
+                            $teste = Disciplina::find()->select(['nome'])->where(['curso' => $id])->count();
+                            if ($teste == '0') {
+                                return "<a href='".$url."' title='Excluir'><i class='fa fa-trash-o fa-lg text-danger' aria-hidden='true'></i></a>";
+                            } else {
+                                return "<i title='Existem disciplinas cadastradas neste curso' class='fa fa-ban fa-lg text-danger' aria-hidden='true'></i>";
+                            }
                         }
                     ]
                 ],

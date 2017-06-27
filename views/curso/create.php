@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $model app\models\Curso */
 
 $this->title = 'Criar Curso';
-//$this->params['breadcrumbs'][] = ['label' => 'Cursos', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Cursos', 'url' => ['index']];
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="curso-create">

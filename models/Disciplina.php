@@ -53,9 +53,9 @@ class Disciplina extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nome' => 'Nome',
-            'cdt' => 'CHT',
-            'cdp' => 'CHP',
-            'cdc' => 'CHC',
+            'cht' => 'CH/T',
+            'chp' => 'CH/P',
+            'chc' => 'CH/C',
             'curso' => 'Curso',
             'semestre_ref' => 'Semestre Referência',
         ];

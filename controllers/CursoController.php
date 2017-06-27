@@ -52,8 +52,13 @@ class CursoController extends Controller
      */
     public function actionView($id)
     {
+        $curso = $this->findModel($id);
+        $all_disciplinas = Disciplina::find()->where(['curso' => $id])->asArray()->all();
+        $disciplinas_set_horarios = Disciplina::getDisciplinasHorarios($id, $all_disciplinas);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $curso,
+            'disciplinas' => json_encode($disciplinas_set_horarios)
         ]);
     }
 

@@ -13,12 +13,12 @@ use yii\bootstrap\Modal;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <div class="row">
+    <div class="row header">
         <div class="col-md-9">
             <?= $form->field($model, 'nome')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="pull-right">
-            <label>Ações</label><br>
+            <label class="acoes">Ações</label><br>
             <button type="button" value="1" class="btn btn-primary add-semestre" title="Clique para adicionar semestre"><i class="fa fa-plus-circle" aria-hidden="true"></i> Semestre</button>
             <button type="button" value="" class="btn btn-danger rm-semestre hidden" title="Clique para remover o último semestre adicionado"><i class="fa fa-minus-circle" aria-hidden="true"></i> Semestre</button>
         </div>

@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     $('#disciplina-curso').on('change', function (e) {
         curso = $(this).val();
-        getSemestres(url, curso, csrftoken);
+        getSemestres(url, curso, 1, csrftoken);
     });
 
-</script
+</script>
