@@ -205,6 +205,7 @@ use yii\widgets\ActiveForm;
         ];
         if (turma[0] == "" || turma[1] == "" || turma[2] == "" || turma[3] == "") {
             $("#conf-dados-turma").prop("disabled",true);
+            $("#valida").text("*O Preenchimento de todos os campos é obrigatório.").css('color', 'red');
         } else {
             $("#valida").text("");
             $("#conf-dados-turma").prop("disabled",false);
@@ -214,15 +215,15 @@ use yii\widgets\ActiveForm;
     //traz os semestres referentes ao curso escolhido
     $('#turma-curso').on('change', function (e) {
         var id_disciplina = $(this).val();
-        getSemestres(id_disciplina);
+        getSemestres(id_disciplina, 1);
     });
 
-    function getSemestres(value) {
+    function getSemestres(id_disciplina, semestreDisciplina) {
         $.ajax({
             url: '<?= Yii::$app->request->baseUrl . '/turma/get-quantidade-semestres' ?>',
             type: 'post',
             data: {
-                id: value
+                id: id_disciplina
             },
             success: function (data) {
                 //console.log(data);
@@ -230,6 +231,7 @@ use yii\widgets\ActiveForm;
                 for (i = 1; i <= data; i++) {
                     $("#turma-semestre").append($("<option></option>").attr("value", i).text(i));
                 }
+                $("#turma-semestre").val(semestreDisciplina).change();
             },
             error: function () {
                 console.log("Erro ao submeter requisição Ajax");

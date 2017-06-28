@@ -170,12 +170,15 @@ class TurmaController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $horario = Yii::$app->db->createCommand("SELECT * FROM cronograma.horario WHERE turma = $id")->queryAll();
+        //echo "<pre>"; die(var_dump($horario));
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'horario' => $horario,
             ]);
         }
     }

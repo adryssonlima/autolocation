@@ -71,7 +71,7 @@ $this->title = 'Turmas';
                             return "<i class='fa fa-eye fa-lg color-green text-success view clicavel' url='" . $url . "' aria-hidden='true'></i>";
                         },
                         'update' => function ($url) {
-                            return "<i class='fa fa-pencil-square-o fa-lg color-green text-primary update clicavel' url='" . $url . "' aria-hidden='true'></i>";
+                            return "<a href='" . $url . "' ><i class='fa fa-pencil-square-o fa-lg color-green text-primary' aria-hidden='true'></i></a>";
                         },
                         'delete' => function ($id) {
                             return "<i class='fa fa-trash-o fa-lg delete text-danger clicavel' url='" . $id . "' aria-hidden='true'></i>";
