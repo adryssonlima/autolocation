@@ -26,7 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
     $('.acoes').find(':input').prop('disabled', false);
     $('.aplicar').remove();
     $('.dismiss').html("<i class='fa fa-times' aria-hidden='true'></i> Fechar");
-    $('.remover-bnt-confirmar').val("true");
 
     var url = '<?= Yii::$app->request->baseUrl . '/disciplina/get-quantidade-semestres' ?>';
     var csrftoken = '<?= Yii::$app->request->getCsrfToken() ?>';

@@ -58,13 +58,16 @@ $this->title = 'Períodos';
                   'enableSorting' => false,
                 ],
                 ['class' => 'yii\grid\ActionColumn',
-                    'template' => '{update} {delete}',
+                    'template' => '{view} {update} {delete}',
                     'buttons' => [
+                        'view' => function ($url) {
+                            return "<i title='Visualizar' class='fa fa-eye fa-lg text-success view clicavel' url='" . $url . "' aria-hidden='true'></i>";
+                        },
                         'update' => function ($url) {
-                            return "<i class='fa fa-pencil-square-o fa-lg color-green text-primary update clicavel' url='" . $url . "' aria-hidden='true'></i>";
+                            return "<i title='Editar' class='fa fa-pencil-square-o fa-lg color-green text-primary update clicavel' url='" . $url . "' aria-hidden='true'></i>";
                         },
                         'delete' => function ($id) {
-                            return "<i class='fa fa-trash-o fa-lg delete text-danger clicavel' url='" . $id . "' aria-hidden='true'></i>";
+                            return "<i title='Remover' class='fa fa-trash-o fa-lg delete text-danger clicavel' url='" . $id . "' aria-hidden='true'></i>";
                         }
                     ]
                 ],
@@ -89,6 +92,13 @@ Modal::end();
     $(".new").click(function(){
         var url = "<?= Yii::$app->request->baseUrl . '/periodo/create' ?>";
         var titulo = "<i class='fa fa-clock-o' aria-hidden='true'></i> Novo Período";
+        var csrftoken = "<?= Yii::$app->request->getCsrfToken() ?>";
+        modalAjax(url, titulo, csrftoken);
+    });
+
+    $(".view").click(function(){
+        var url = $(this).attr("url");
+        var titulo = "<i class='fa fa-eye' aria-hidden='true'></i> Visualizar Período";
         var csrftoken = "<?= Yii::$app->request->getCsrfToken() ?>";
         modalAjax(url, titulo, csrftoken);
     });

@@ -58,7 +58,7 @@ $this->title = 'Cursos';
                     'template' => '{view} {update} {delete}',
                     'buttons' => [
                         'view' => function ($url) {
-                            return "<a href='".$url."' title='Visualizar'><i class='fa fa-eye fa-lg <text-success></text-success>' aria-hidden='true'></i></a>";
+                            return "<a href='".$url."' title='Visualizar'><i class='fa fa-eye fa-lg text-success' aria-hidden='true'></i></a>";
                         },
                         'update' => function ($url) {
                             return "<a href='".$url."' title='Editar'><i class='fa fa-pencil-square-o fa-lg text-primary' aria-hidden='true'></i></a>";
@@ -67,7 +67,7 @@ $this->title = 'Cursos';
                             $id = preg_replace("/[^0-9]/", "", $url);
                             $teste = Disciplina::find()->select(['nome'])->where(['curso' => $id])->count();
                             if ($teste == '0') {
-                                return "<a href='".$url."' title='Excluir'><i class='fa fa-trash-o fa-lg text-danger' aria-hidden='true'></i></a>";
+                                return "<i url='".$url."' title='Excluir' class='fa fa-trash-o fa-lg text-danger clicavel delete' aria-hidden='true'></i>";
                             } else {
                                 return "<i title='Existem disciplinas cadastradas neste curso' class='fa fa-ban fa-lg text-danger' aria-hidden='true'></i>";
                             }
@@ -79,3 +79,23 @@ $this->title = 'Cursos';
         ?>
     </div>
 </div>
+
+<?php
+Modal::begin([
+    "header" => "<h3 class='modal-titulo'></h3>",
+    "id" => "modal"
+]);
+echo "<div class='modal-conteudo'></div>";
+Modal::end();
+?>
+
+<script>
+
+    $(".delete").click(function(){
+        var url = $(this).attr("url");
+        var titulo = "<i class='fa fa-trash-o aria-hidden='true'></i> Remover Curso";
+        var csrftoken = "<?= Yii::$app->request->getCsrfToken() ?>";
+        modalAjax(url, titulo, csrftoken);
+    });
+
+</script>

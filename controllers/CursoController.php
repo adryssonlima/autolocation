@@ -233,7 +233,7 @@ class CursoController extends Controller
             $model->delete();
             return $this->redirect(['index']);
         } else {
-            return $this->render('delete', [
+            return $this->renderAjax('delete', [
                 'model' => $model,
             ]);
         }
