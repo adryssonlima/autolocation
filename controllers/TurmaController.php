@@ -168,17 +168,25 @@ class TurmaController extends Controller
      * @return mixed
      */
     public function actionUpdate($id)
-    {
+    {    
         $model = $this->findModel($id);
-        $horario = Yii::$app->db->createCommand("SELECT * FROM cronograma.horario WHERE turma = $id")->queryAll();
-        //echo "<pre>"; die(var_dump($horario));
-
+        $horario = Yii::$app->db->createCommand("SELECT 
+                h.*, s.identificador as identificador_sala, d.nome as nome_disciplina
+            FROM
+                cronograma.horario AS h
+                    INNER JOIN
+                cronograma.sala AS s ON (h.sala = s.id)
+                    INNER JOIN
+                cronograma.disciplina as d ON (h.disciplina = d.id)
+            WHERE
+                h.turma = $id")->queryAll();
+        //echo "<pre>"; die(var_dump($model));
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
-                'horario' => $horario,
+                'horario' => json_encode($horario),
             ]);
         }
     }

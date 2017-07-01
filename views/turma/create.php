@@ -135,7 +135,7 @@ $this->title = 'Nova Turma';
                         $('#'+periodo['id']).append("<td id='td" + dia['id']+periodo['id'] + "' class='tdhover'> <span id='span" + dia['id']+periodo['id'] + "'></span> <a id='link" + dia['id']+periodo['id'] + "' id_dia='" + dia['id'] + "' id_periodo='" + periodo['id'] + "' href='#' class='pull-right text-success' data-toggle='modal' data-target='#myModal' title='Editar'> <span class='glyphicon glyphicon-pencil'></span> </a> </td>");
                     });
                 });
-                console.log("Tabela Criada");
+                console.log("Tabela Criada");               
             },
             error: function () {
                 console.log("Erro ao submeter requisição Ajax");
