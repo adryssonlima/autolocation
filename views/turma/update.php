@@ -113,9 +113,17 @@ Modal::end();
         var periodo = $("#dia-periodo").attr("periodo");
         var sala = $("#modal-sala option:selected").val();
         var disciplina = $("#modal-disciplina option:selected").val();
-        //adiciona hidden com as informações do horário
-        $("#td"+dia+periodo).append("<hidden id='hidden" + dia+periodo + "' dia='" + dia + "' periodo='" + periodo + "' sala='" + sala + "' disciplina='" + disciplina + "' />");
-
+        if ($("#hidden"+dia+periodo).length) {
+            //edita hidden com as informações do horário caso exista
+            $("#hidden"+dia+periodo).attr('dia', dia);
+            $("#hidden"+dia+periodo).attr('periodo' ,periodo);
+            $("#hidden"+dia+periodo).attr('sala', sala);
+            $("#hidden"+dia+periodo).attr('disciplina', disciplina);
+        } else {
+            //adiciona hidden com as informações do horário caso ainda não exista
+            $("#td"+dia+periodo).append("<hidden class='info-turma' id='hidden" + dia+periodo + "' dia='" + dia + "' periodo='" + periodo + "' sala='" + sala + "' disciplina='" + disciplina + "' />");
+        }
+        
         var sala = $("#modal-sala option:selected").text();
         var disciplina = $("#modal-disciplina option:selected").text();
         $("#span"+dia+periodo).text("");
@@ -156,6 +164,10 @@ Modal::end();
         var semestre = $('#turma-semestre').val();
         var turno = $('#turma-turno').val();
         var arrayhorarios = [];
+
+        //FAZER VERIFICAÇÃO DE HORARIOS INDISPONIVEIS
+        verificacaoFinal();
+/*
         $("#table-horario td hidden").each(function() {
             var horario = { //os atributos devem estar OBRIGATORIAMENTE nessa ordem!!!
                 turma: null, //atributo usado para guardar o id da turma apos inserida no banco
@@ -168,7 +180,68 @@ Modal::end();
         });
         createTurmaHorario(identificador, curso, semestre, turno, arrayhorarios);
         //console.log(arrayhorarios);
+*/
     });
+
+    function verificacaoFinal() {
+        $.ajax({
+            url: '<?= Yii::$app->request->baseUrl . '/turma/horarios-ocupados' ?>',
+            type: 'post',
+            data: {
+                id: null
+            },
+            success: function (data) {
+                let ocupados = $.parseJSON(data);
+                console.log(ocupados);
+
+                let horario = $.parseJSON('<?= $horario ?>');
+                horario.forEach(function(val) { //remove dos horarios ocupados os horarios da turma a ser editada
+                    let = semana_periodo = val.semana+val.periodo;
+                    $.each(ocupados, function(i, v) {
+                        if (semana_periodo == v)
+                            delete ocupados[i];
+                    });
+                });
+                console.log(ocupados);
+
+                let arrayhorarios = [];
+                $("#table-horario td hidden").each(function() {
+                    let horario = { //os atributos devem estar OBRIGATORIAMENTE nessa ordem!!!
+                        turma: null, //atributo usado para guardar o id da turma apos inserida no banco
+                        dia: $(this).attr("dia"),
+                        sala: $(this).attr("sala"),
+                        periodo: $(this).attr("periodo"),
+                        disciplina: $(this).attr("disciplina")
+                    };
+                    arrayhorarios.push(horario);
+                });
+                console.log(arrayhorarios);
+                
+                //VERIFICA SE EXISTEM HORARIOS COM CHOQUE
+                let arrayHorariosChoque = [];
+                arrayhorarios.forEach(function(val) {
+                    let = dia_periodo = val.dia+val.periodo;
+                    $.each(ocupados, function(i, v) {
+                        if (dia_periodo == v) {
+                            arrayHorariosChoque.push(i);
+                            console.log('existem horarios com choque');
+                        }
+                    });
+                });
+
+                if (!arrayHorariosChoque.length) {
+                    console.log('pode salvar');
+                } else {
+                    console.log('horarios com choque');
+                }
+
+
+            },
+            error: function () {
+                console.log("Erro ao submeter requisição Ajax");
+            }
+        });
+    }
 
     function createTabelaHorario(turno) { //Cria a tabela de horáarios dinamicamente com base no turno da turma
         return $.ajax({
@@ -291,7 +364,9 @@ Modal::end();
                     if (val.semana == dia && val.periodo == periodo) {
                         $("#modal-sala").append($("<option></option>").attr("value", val.sala).text(val.identificador_sala));
                         $("#modal-sala").val(val.sala);
-                        $("#modal-disciplina").val(val.disciplina);
+                        if ($("#modal-disciplina option[value='"+val.disciplina+"']").val()) {
+                            $("#modal-disciplina").val(val.disciplina);
+                        }
                     }
                 });
                 //console.log(dados);

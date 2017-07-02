@@ -84,8 +84,16 @@ $this->title = 'Disciplinas';
                         'update' => function ($url) {
                             return "<i title='Editar' class='fa fa-pencil-square-o fa-lg color-green text-primary update clicavel' url='" . $url . "' aria-hidden='true'></i>";
                         },
-                        'delete' => function ($id) {
-                            return "<i title='Remover' class='fa fa-trash-o fa-lg delete text-danger clicavel' url='" . $id . "' aria-hidden='true'></i>";
+                        'delete' => function ($url) {
+                            $id = preg_replace("/[^0-9]/", "", $url);
+                            $teste = Yii::$app->db->createCommand("SELECT * FROM cronograma.horario WHERE disciplina = $id")->queryOne();
+                            if (!$teste) {
+                                return "<i title='Remover' class='fa fa-trash-o fa-lg delete text-danger clicavel' url='" . $url . "' aria-hidden='true'></i>";
+                            } else {
+                                return "<i title='Existem turmas cursando esta disciplina' class='fa fa-ban fa-lg text-danger' aria-hidden='true'></i>";
+                            }
+                            
+                            
                         }
                     ]
                 ],
