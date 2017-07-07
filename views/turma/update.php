@@ -38,6 +38,21 @@ echo "&nbsp;<button type='button' class='btn btn-danger pull-right confirm-alter
 Modal::end();
 ?>
 
+<?php
+Modal::begin([
+    "header" => "<h3 class='modal-titulo'>Atenção!</h3>",
+    "id" => "modal-choque",
+    "size" => "modal-sm",
+]);
+echo "<div class='modal-conteudo center aviso' style='margin-top: 0px;'>";
+echo "<p><i class='fa fa-exclamation-triangle fa-2x' aria-hidden='true'></i><br>";
+echo "As disciplinas em vermelho estão com choque de horários.</p>";
+echo "<p>Clique em 'Voltar' para fazer a correção.</p>";
+echo "</div><br>";
+echo "<button type='button' class='btn btn-default pull-right' data-dismiss='modal'>Ok</button><br><br>";
+Modal::end();
+?>
+
 <style>
     .padding {
         padding: 1px;
@@ -129,6 +144,7 @@ Modal::end();
         $("#span"+dia+periodo).text("");
         $("#span"+dia+periodo).append(disciplina + "<br>" + sala);
         $("#td"+dia+periodo).css('text-align','center');
+        $("#span"+dia+periodo).css( "color", "black" );
         if (!$("#linkremove" + dia+periodo).length) {
             $("#td"+dia+periodo).append("<a id='linkremove" + dia+periodo + "' id_dia='" + dia + "' id_periodo='" + periodo + "' href='#/' class='pull-right text-danger' style='margin-right: 2px;' title='Remover'> <span class='glyphicon glyphicon-trash'></span> </a>");
         }
@@ -163,10 +179,10 @@ Modal::end();
         var curso = $('#turma-curso').val();
         var semestre = $('#turma-semestre').val();
         var turno = $('#turma-turno').val();
-        var arrayhorarios = [];
+        //var arrayhorarios = [];
 
         //FAZER VERIFICAÇÃO DE HORARIOS INDISPONIVEIS
-        verificacaoFinal();
+        verificacaoFinal(identificador, curso, semestre, turno);
 /*
         $("#table-horario td hidden").each(function() {
             var horario = { //os atributos devem estar OBRIGATORIAMENTE nessa ordem!!!
@@ -183,7 +199,7 @@ Modal::end();
 */
     });
 
-    function verificacaoFinal() {
+    function verificacaoFinal(identificador, curso, semestre, turno) {
         $.ajax({
             url: '<?= Yii::$app->request->baseUrl . '/turma/horarios-ocupados' ?>',
             type: 'post',
@@ -192,7 +208,7 @@ Modal::end();
             },
             success: function (data) {
                 let ocupados = $.parseJSON(data);
-                console.log(ocupados);
+                //console.log(ocupados);
 
                 let horario = $.parseJSON('<?= $horario ?>');
                 horario.forEach(function(val) { //remove dos horarios ocupados os horarios da turma a ser editada
@@ -202,7 +218,7 @@ Modal::end();
                             delete ocupados[i];
                     });
                 });
-                console.log(ocupados);
+                //console.log(ocupados);
 
                 let arrayhorarios = [];
                 $("#table-horario td hidden").each(function() {
@@ -215,7 +231,7 @@ Modal::end();
                     };
                     arrayhorarios.push(horario);
                 });
-                console.log(arrayhorarios);
+                //console.log(arrayhorarios);
                 
                 //VERIFICA SE EXISTEM HORARIOS COM CHOQUE
                 let arrayHorariosChoque = [];
@@ -224,18 +240,20 @@ Modal::end();
                     $.each(ocupados, function(i, v) {
                         if (dia_periodo == v) {
                             arrayHorariosChoque.push(i);
-                            console.log('existem horarios com choque');
                         }
                     });
                 });
 
                 if (!arrayHorariosChoque.length) {
-                    console.log('pode salvar');
+                    //console.log('pode salvar');
+                    updateTurmaHorario(identificador, curso, semestre, turno, arrayhorarios);
                 } else {
-                    console.log('horarios com choque');
+                    //console.log('horarios com choque');
+                    arrayHorariosChoque.forEach(function(i, v){
+                        $("#span"+v).css( "color", "red" );
+                    });
+                    $("#modal-choque").modal("show");
                 }
-
-
             },
             error: function () {
                 console.log("Erro ao submeter requisição Ajax");
@@ -377,11 +395,12 @@ Modal::end();
         });
     }
 
-    function createTurmaHorario(identificador, curso, semestre, turno, arrayhorarios) {
+    function updateTurmaHorario(identificador, curso, semestre, turno, arrayhorarios) {
         $.ajax({
-            url: '<?= Yii::$app->request->baseUrl . '/turma/nova-turma' ?>',
+            url: '<?= Yii::$app->request->baseUrl . '/turma/update-turma' ?>',
             type: 'post',
             data: {
+                id: "<?= $model->id ?>",
                 identificador: identificador,
                 curso: curso,
                 semestre: semestre,
@@ -392,7 +411,7 @@ Modal::end();
                 console.log(data);
             },
             error: function () {
-                console.log("Erro ao submeter requisição Ajax");
+                //console.log("Erro ao submeter requisição Ajax");
             }
         });
     }

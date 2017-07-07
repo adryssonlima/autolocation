@@ -180,15 +180,29 @@ class TurmaController extends Controller
                 cronograma.disciplina as d ON (h.disciplina = d.id)
             WHERE
                 h.turma = $id")->queryAll();
-        //echo "<pre>"; die(var_dump($model));
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-                'horario' => json_encode($horario),
-            ]);
+
+        return $this->render('update', [
+            'model' => $model,
+            'horario' => json_encode($horario),
+        ]);
+    }
+
+    public function actionUpdateTurma() {
+        $data = Yii::$app->request->post();
+        $model = $this->findModel($data['id']);
+        $model->identificador = $data['identificador'];
+        $model->semestre = $data['semestre'];
+        if ($model->save()) {
+            $delete = Yii::$app->db->createCommand()
+                        ->delete('cronograma.horario', ['turma' => $model->id])
+                        ->execute();
+            if ($delete) {
+                if ($this->createHorarios($model->id, $data['horarios']) >= 1) {
+                    return $this->redirect(['index']);
+                }
+            }
         }
+        die("Erro ao editar dados!");
     }
 
     /**
