@@ -94,9 +94,6 @@ use yii\widgets\ActiveForm;
                     <div class="step2">
                         <div class="row">
                             <h3>Quadro de Horários da Turma</h3><br>
-                            <ul class="list-inline pull-right">
-                                <li><button id="indisponiveis" type="button" class="btn btn-success">Atualizar Horários Indisponíveis <i class="glyphicon glyphicon-refresh"></i></button></li>
-                            </ul>
                             <div id="div-table-horario">
                                 <table id="table-horario" class="table table-bordered table-striped table-hover">
                                   <thead>

@@ -91,10 +91,6 @@ Modal::end();
 
 <script>
 
-    $('#indisponiveis').click(function() {
-        getHorariosOcupados();
-    });
-
     $("#turma-semestre").change(function() { //verifica a alteração de semestre
         $("#modal-aviso").modal("show");
         $(".cancel-alter-semestre").click(function(){
@@ -179,24 +175,8 @@ Modal::end();
         var curso = $('#turma-curso').val();
         var semestre = $('#turma-semestre').val();
         var turno = $('#turma-turno').val();
-        //var arrayhorarios = [];
 
-        //FAZER VERIFICAÇÃO DE HORARIOS INDISPONIVEIS
         verificacaoFinal(identificador, curso, semestre, turno);
-/*
-        $("#table-horario td hidden").each(function() {
-            var horario = { //os atributos devem estar OBRIGATORIAMENTE nessa ordem!!!
-                turma: null, //atributo usado para guardar o id da turma apos inserida no banco
-                dia: $(this).attr("dia"),
-                sala: $(this).attr("sala"),
-                periodo: $(this).attr("periodo"),
-                disciplina: $(this).attr("disciplina")
-            };
-            arrayhorarios.push(horario);
-        });
-        createTurmaHorario(identificador, curso, semestre, turno, arrayhorarios);
-        //console.log(arrayhorarios);
-*/
     });
 
     function verificacaoFinal(identificador, curso, semestre, turno) {

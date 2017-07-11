@@ -22,14 +22,9 @@ $this->title = 'Nova Turma';
 
 <script>
 
-    $('#indisponiveis').click(function() {
-        getHorariosOcupados();
-    });
-
     $('#conf-dados-turma').click(function() {
         var turno = $('#turma-turno').val();
         createTabelaHorario(turno);
-        getHorariosOcupados();
     });
 
     $("#table-horario").on( "click", "a", function() {
@@ -54,9 +49,17 @@ $this->title = 'Nova Turma';
         var periodo = $("#dia-periodo").attr("periodo");
         var sala = $("#modal-sala option:selected").val();
         var disciplina = $("#modal-disciplina option:selected").val();
-        //adiciona hidden com as informações do horário
-        $("#td"+dia+periodo).append("<hidden id='hidden" + dia+periodo + "' dia='" + dia + "' periodo='" + periodo + "' sala='" + sala + "' disciplina='" + disciplina + "' />");
-
+        if ($("#hidden"+dia+periodo).length) {
+            //edita hidden com as informações do horário caso exista
+            $("#hidden"+dia+periodo).attr('dia', dia);
+            $("#hidden"+dia+periodo).attr('periodo' ,periodo);
+            $("#hidden"+dia+periodo).attr('sala', sala);
+            $("#hidden"+dia+periodo).attr('disciplina', disciplina);
+        } else {
+            //adiciona hidden com as informações do horário caso ainda não exista
+            $("#td"+dia+periodo).append("<hidden class='info-turma' id='hidden" + dia+periodo + "' dia='" + dia + "' periodo='" + periodo + "' sala='" + sala + "' disciplina='" + disciplina + "' />");
+        }
+        
         var sala = $("#modal-sala option:selected").text();
         var disciplina = $("#modal-disciplina option:selected").text();
         $("#span"+dia+periodo).text("");
@@ -96,20 +99,62 @@ $this->title = 'Nova Turma';
         var curso = $('#turma-curso').val();
         var semestre = $('#turma-semestre').val();
         var turno = $('#turma-turno').val();
-        var arrayhorarios = [];
-        $("#table-horario td hidden").each(function() {
-            var horario = { //os atributos devem estar OBRIGATORIAMENTE nessa ordem!!!
-                turma: null, //atributo usado para guardar o id da turma apos inserida no banco
-                dia: $(this).attr("dia"),
-                sala: $(this).attr("sala"),
-                periodo: $(this).attr("periodo"),
-                disciplina: $(this).attr("disciplina")
-            };
-            arrayhorarios.push(horario);
-        });
-        createTurmaHorario(identificador, curso, semestre, turno, arrayhorarios);
-        //console.log(arrayhorarios);
+
+        verificacaoFinal(identificador, curso, semestre, turno);
+
     });
+
+    function verificacaoFinal(identificador, curso, semestre, turno) {
+        $.ajax({
+            url: '<?= Yii::$app->request->baseUrl . '/turma/horarios-ocupados' ?>',
+            type: 'post',
+            data: {
+                id: null
+            },
+            success: function (data) {
+                let ocupados = $.parseJSON(data);
+                //console.log(ocupados);
+
+                let arrayhorarios = [];
+                $("#table-horario td hidden").each(function() {
+                    let horario = { //os atributos devem estar OBRIGATORIAMENTE nessa ordem!!!
+                        turma: null, //atributo usado para guardar o id da turma apos inserida no banco
+                        dia: $(this).attr("dia"),
+                        sala: $(this).attr("sala"),
+                        periodo: $(this).attr("periodo"),
+                        disciplina: $(this).attr("disciplina")
+                    };
+                    arrayhorarios.push(horario);
+                });
+                //console.log(arrayhorarios);
+                
+                //VERIFICA SE EXISTEM HORARIOS COM CHOQUE
+                let arrayHorariosChoque = [];
+                arrayhorarios.forEach(function(val) {
+                    let = dia_periodo = val.dia+val.periodo;
+                    $.each(ocupados, function(i, v) {
+                        if (dia_periodo == v) {
+                            arrayHorariosChoque.push(i);
+                        }
+                    });
+                });
+
+                if (!arrayHorariosChoque.length) {
+                    //console.log('pode salvar');
+                    createTurmaHorario(identificador, curso, semestre, turno, arrayhorarios);
+                } else {
+                    //console.log('horarios com choque');
+                    arrayHorariosChoque.forEach(function(i, v){
+                        $("#span"+v).css( "color", "red" );
+                    });
+                    $("#modal-choque").modal("show");
+                }
+            },
+            error: function () {
+                console.log("Erro ao submeter requisição Ajax");
+            }
+        });
+    }
 
     function createTabelaHorario(turno) { //Cria a tabela de horáarios dinamicamente com base no turno da turma
         $.ajax({
@@ -123,24 +168,30 @@ $this->title = 'Nova Turma';
                 var dias_da_semana = dados['dias'];
                 var periodos = dados['periodos'];
 
-                $("#th-dias-da-semana").empty();
-                $('#th-dias-da-semana').append("<th class='th-center'><span class='glyphicon glyphicon-time'></span></th>");
-                $.each(dias_da_semana, function(keyDia, dia) {
-                    $('#th-dias-da-semana').append("<th class='th-center'>" + dia['dia'] + "</th>");
-                });
-                $("#tbody-periodos").empty();
-                $.each(periodos, function(keyPeriodo, periodo) {
-                    $('#tbody-periodos').append("<tr id='" + periodo['id'] + "'><th class='th-center'>" + periodo['identificador'] + "<br>" + periodo['intervalo'] + "</th></tr>");
-                    $.each(dias_da_semana, function(keyDia, dia) {
-                        $('#'+periodo['id']).append("<td id='td" + dia['id']+periodo['id'] + "' class='tdhover'> <span id='span" + dia['id']+periodo['id'] + "'></span> <a id='link" + dia['id']+periodo['id'] + "' id_dia='" + dia['id'] + "' id_periodo='" + periodo['id'] + "' href='#' class='pull-right text-success' data-toggle='modal' data-target='#myModal' title='Editar'> <span class='glyphicon glyphicon-pencil'></span> </a> </td>");
-                    });
-                });
-                console.log("Tabela Criada");               
+                if (montaTabelaHorario(dias_da_semana, periodos)) {
+                    getHorariosOcupados();
+                }              
             },
             error: function () {
                 console.log("Erro ao submeter requisição Ajax");
             }
         });
+    }
+
+    function montaTabelaHorario(dias_da_semana, periodos) {
+        $("#th-dias-da-semana").empty();
+        $('#th-dias-da-semana').append("<th class='th-center'><span class='glyphicon glyphicon-time'></span></th>");
+        $.each(dias_da_semana, function(keyDia, dia) {
+            $('#th-dias-da-semana').append("<th class='th-center'>" + dia['dia'] + "</th>");
+        });
+        $("#tbody-periodos").empty();
+        $.each(periodos, function(keyPeriodo, periodo) {
+            $('#tbody-periodos').append("<tr id='" + periodo['id'] + "'><th class='th-center'>" + periodo['identificador'] + "<br>" + periodo['intervalo'] + "</th></tr>");
+            $.each(dias_da_semana, function(keyDia, dia) {
+                $('#'+periodo['id']).append("<td id='td" + dia['id']+periodo['id'] + "' class='tdhover'> <span class='info-turma-disciplina-sala' id='span" + dia['id']+periodo['id'] + "'></span> <a id='link" + dia['id']+periodo['id'] + "' id_dia='" + dia['id'] + "' id_periodo='" + periodo['id'] + "' href='#' class='pull-right text-success' data-toggle='modal' data-target='#myModal' title='Editar'> <span class='glyphicon glyphicon-pencil'></span> </a> </td>");
+            });
+        });
+        return true;
     }
 
     //setInterval(getHorariosOcupados,2000);
