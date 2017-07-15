@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-
+use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Turma */
@@ -19,6 +19,38 @@ $this->title = 'Nova Turma';
     ]) ?>
 
 </div>
+
+<?php
+Modal::begin([
+    "header" => "<h3 class='modal-titulo'>Atenção!</h3>",
+    "id" => "modal-choque",
+    "size" => "modal-sm",
+]);
+echo "<div class='modal-conteudo center aviso' style='margin-top: 0px;'>";
+echo "<p><i class='fa fa-exclamation-triangle fa-2x' aria-hidden='true'></i><br>";
+echo "As disciplinas em vermelho estão com choque de horários.</p>";
+echo "<p>Clique em 'Voltar' para fazer a correção.</p>";
+echo "</div><br>";
+echo "<button type='button' class='btn btn-default pull-right' data-dismiss='modal'>Ok</button><br><br>";
+Modal::end();
+?>
+
+<style>
+    .padding {
+        padding: 1px;
+    }
+	.margin-bottom {
+		margin-bottom: 7px;
+	}
+    .center {
+        text-align: center;
+        margin-top: 30px;
+    }
+    .aviso {
+        color: #999999;
+        font-weight: bold;
+    }
+</style>
 
 <script>
 
@@ -113,7 +145,8 @@ $this->title = 'Nova Turma';
             },
             success: function (data) {
                 let ocupados = $.parseJSON(data);
-                //console.log(ocupados);
+                //ocupados[5] = "41";
+                console.log(ocupados);
 
                 let arrayhorarios = [];
                 $("#table-horario td hidden").each(function() {
@@ -134,7 +167,7 @@ $this->title = 'Nova Turma';
                     let = dia_periodo = val.dia+val.periodo;
                     $.each(ocupados, function(i, v) {
                         if (dia_periodo == v) {
-                            arrayHorariosChoque.push(i);
+                            arrayHorariosChoque.push(v);
                         }
                     });
                 });
@@ -144,7 +177,7 @@ $this->title = 'Nova Turma';
                     createTurmaHorario(identificador, curso, semestre, turno, arrayhorarios);
                 } else {
                     //console.log('horarios com choque');
-                    arrayHorariosChoque.forEach(function(i, v){
+                    arrayHorariosChoque.forEach(function(v, i){
                         $("#span"+v).css( "color", "red" );
                     });
                     $("#modal-choque").modal("show");
@@ -188,7 +221,7 @@ $this->title = 'Nova Turma';
         $.each(periodos, function(keyPeriodo, periodo) {
             $('#tbody-periodos').append("<tr id='" + periodo['id'] + "'><th class='th-center'>" + periodo['identificador'] + "<br>" + periodo['intervalo'] + "</th></tr>");
             $.each(dias_da_semana, function(keyDia, dia) {
-                $('#'+periodo['id']).append("<td id='td" + dia['id']+periodo['id'] + "' class='tdhover'> <span class='info-turma-disciplina-sala' id='span" + dia['id']+periodo['id'] + "'></span> <a id='link" + dia['id']+periodo['id'] + "' id_dia='" + dia['id'] + "' id_periodo='" + periodo['id'] + "' href='#' class='pull-right text-success' data-toggle='modal' data-target='#myModal' title='Editar'> <span class='glyphicon glyphicon-pencil'></span> </a> </td>");
+                $('#'+periodo['id']).append("<td id='td" + dia['id']+periodo['id'] + "' class='tdhover'> <span class='info-turma-disciplina-sala' id='span" + dia['id']+periodo['id'] + "'></span> <a id='link" + dia['id']+periodo['id'] + "' id_dia='" + dia['id'] + "' id_periodo='" + periodo['id'] + "' href='#' class='pull-right text-success' title='Editar'> <span class='glyphicon glyphicon-pencil'></span> </a> </td>");
             });
         });
         return true;
@@ -231,17 +264,25 @@ $this->title = 'Nova Turma';
             },
             success: function (data) {
                 var dados = $.parseJSON(data);
-                var salas = dados['salas'];
-                var disciplinas = dados['disciplinas'];
-                $("#modal-sala").empty();
-                $.each(salas, function(index, value) {
-                    $("#modal-sala").append($("<option></option>").attr("value", index).text(value));
-                });
-                $("#modal-disciplina").empty();
-                $.each(disciplinas, function(index, value) {
-                    $("#modal-disciplina").append($("<option></option>").attr("value", index).text(value));
-                });
-                console.log(dados);
+                var salas = dados.salas;
+                var disciplinas = dados.disciplinas;
+
+                if (salas.length == 0) {
+                    $("#span"+dia+periodo).text("Sem Salas Disponíveis").css('color', 'red');
+                    $("#td"+dia+periodo).css('text-align','center');
+                    $("#link"+dia+periodo).remove();
+                    $("#linkremove"+dia+periodo).remove();
+                } else {
+                    $("#modal-sala").empty();
+                    $.each(salas, function(index, value) {
+                        $("#modal-sala").append($("<option></option>").attr("value", index).text(value));
+                    });
+                    $("#modal-disciplina").empty();
+                    $.each(disciplinas, function(index, value) {
+                        $("#modal-disciplina").append($("<option></option>").attr("value", index).text(value));
+                    });
+                    $("#myModal").modal('show');
+                }
             },
             error: function () {
                 console.log("Erro ao submeter requisição Ajax");
