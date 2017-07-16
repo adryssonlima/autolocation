@@ -243,7 +243,7 @@ Modal::end();
     }
 
     function createTabelaHorario(turno) { //Cria a tabela de horáarios dinamicamente com base no turno da turma
-        return $.ajax({
+        $.ajax({
             url: '<?= Yii::$app->request->baseUrl . '/turma/get-dias-periodos' ?>',
             type: 'post',
             data: {
@@ -253,7 +253,7 @@ Modal::end();
                 var dados = $.parseJSON(data);
                 var dias_da_semana = dados['dias'];
                 var periodos = dados['periodos'];
-                                
+
                 if (montaTabelaHorario(dias_da_semana, periodos)) {
                     getHorariosOcupados();
                 }

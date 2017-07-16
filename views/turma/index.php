@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use app\models\Curso;
+use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\TurmaSearch */
@@ -68,7 +69,7 @@ $this->title = 'Turmas';
                     'template' => '{view} {update} {delete}',
                     'buttons' => [
                         'view' => function ($url) {
-                            return "<i class='fa fa-eye fa-lg color-green text-success view clicavel' url='" . $url . "' aria-hidden='true'></i>";
+                            return "<a href='".$url."' title='Visualizar'><i class='fa fa-eye fa-lg text-success' aria-hidden='true'></i></a>";
                         },
                         'update' => function ($url) {
                             return "<a href='" . $url . "' ><i class='fa fa-pencil-square-o fa-lg color-green text-primary' aria-hidden='true'></i></a>";
@@ -84,3 +85,23 @@ $this->title = 'Turmas';
     </div>
 
 </div>
+
+<?php
+Modal::begin([
+    "header" => "<h3 class='modal-titulo'></h3>",
+    "id" => "modal"
+]);
+echo "<div class='modal-conteudo'></div>";
+Modal::end();
+?>
+
+<script>
+
+    $(".delete").click(function(){
+        var url = $(this).attr("url");
+        var titulo = "<i class='fa fa-trash-o aria-hidden='true'></i> Remover Turma?";
+        var csrftoken = "<?= Yii::$app->request->getCsrfToken() ?>";
+        modalAjax(url, titulo, csrftoken);
+    });
+
+</script>

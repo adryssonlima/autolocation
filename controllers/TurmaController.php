@@ -57,8 +57,37 @@ class TurmaController extends Controller
      */
     public function actionView($id)
     {
+        $model = Yii::$app->db->createCommand("SELECT 
+                t.id,
+                t.identificador,
+                c.nome AS curso,
+                t.semestre,
+                CASE t.turno
+                    WHEN 'M' THEN 'Manhã'
+                    WHEN 'T' THEN 'Tarde'
+                    WHEN 'N' THEN 'Noite'
+                END AS turno
+            FROM
+                cronograma.turma AS t
+                    INNER JOIN
+                cronograma.curso AS c ON (t.curso = c.id)
+            WHERE
+                t.id = $id")->queryAll();
+
+        $horario = Yii::$app->db->createCommand("SELECT 
+                h.*, s.identificador as identificador_sala, d.nome as nome_disciplina
+            FROM
+                cronograma.horario AS h
+                    INNER JOIN
+                cronograma.sala AS s ON (h.sala = s.id)
+                    INNER JOIN
+                cronograma.disciplina as d ON (h.disciplina = d.id)
+            WHERE
+                h.turma = $id")->queryAll();
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'horario' => json_encode($horario),
         ]);
     }
 
@@ -213,9 +242,23 @@ class TurmaController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
 
-        return $this->redirect(['index']);
+        if (Yii::$app->request->post("remover")) {
+            $delete = Yii::$app->db->createCommand()
+                        ->delete('cronograma.horario', ['turma' => $model->id])
+                        ->execute();
+            if ($delete) {
+                $model->delete();
+                return $this->redirect(['index']);
+            } else {
+                die("Erro ao excluir turma");
+            }
+        } else {
+            return $this->renderAjax('delete', [
+                'model' => $model,
+            ]);
+        }
     }
 
     //Retorna a quantidade de semestres do curso
