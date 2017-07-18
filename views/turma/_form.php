@@ -66,7 +66,7 @@ use yii\widgets\ActiveForm;
                 <div class="tab-pane active" role="tabpanel" id="step1">
                     <?php $form = ActiveForm::begin(['id' => 'turma-form', 'fieldConfig' => ['options' => ['tag' => false]]]); ?>
                         <div class="step1">
-                            <h3>Nova Turma</h3><br>
+                            <h3><?= $model->isNewRecord ? "Nova Turma" : "Alterar Turma" ?></h3><br>
                             <div class="row">
                                 <div class="col-md-6">
                                     <?= $form->field($model, 'identificador')->textInput(['maxlength' => true]) ?>

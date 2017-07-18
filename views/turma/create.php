@@ -215,7 +215,7 @@ Modal::end();
         $("#th-dias-da-semana").empty();
         $('#th-dias-da-semana').append("<th class='th-center'><span class='glyphicon glyphicon-time'></span></th>");
         $.each(dias_da_semana, function(keyDia, dia) {
-            $('#th-dias-da-semana').append("<th class='th-center'>" + dia['dia'] + "</th>");
+            $('#th-dias-da-semana').append("<th class='table-horario th-center'>" + dia['dia'] + "</th>");
         });
         $("#tbody-periodos").empty();
         $.each(periodos, function(keyPeriodo, periodo) {

@@ -242,6 +242,7 @@ class TurmaController extends Controller
      */
     public function actionDelete($id)
     {
+        //$id = Yii::$app->request->post('id');
         $model = $this->findModel($id);
 
         if (Yii::$app->request->post("remover")) {
@@ -255,8 +256,37 @@ class TurmaController extends Controller
                 die("Erro ao excluir turma");
             }
         } else {
-            return $this->renderAjax('delete', [
+            $model = Yii::$app->db->createCommand("SELECT 
+                    t.id,
+                    t.identificador,
+                    c.nome AS curso,
+                    t.semestre,
+                    CASE t.turno
+                        WHEN 'M' THEN 'Manhã'
+                        WHEN 'T' THEN 'Tarde'
+                        WHEN 'N' THEN 'Noite'
+                    END AS turno
+                FROM
+                    cronograma.turma AS t
+                        INNER JOIN
+                    cronograma.curso AS c ON (t.curso = c.id)
+                WHERE
+                    t.id = $id")->queryAll();
+
+            $horario = Yii::$app->db->createCommand("SELECT 
+                    h.*, s.identificador as identificador_sala, d.nome as nome_disciplina
+                FROM
+                    cronograma.horario AS h
+                        INNER JOIN
+                    cronograma.sala AS s ON (h.sala = s.id)
+                        INNER JOIN
+                    cronograma.disciplina as d ON (h.disciplina = d.id)
+                WHERE
+                    h.turma = $id")->queryAll();
+            
+            return $this->render('delete', [    
                 'model' => $model,
+                'horario' => json_encode($horario),
             ]);
         }
     }

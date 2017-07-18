@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Cursos', 'url' => ['index']];
 ?>
 <div class="curso-view">
 
-    <h1><i class='fa fa-eye' aria-hidden='true'></i> Curso: <span class="aviso"><?= $this->title ?></span></h1>
+    <h1><i class='fa fa-eye' aria-hidden='true'></i> Curso: <span class="aviso"><?= $this->title ?></span><span class="pull-right"><button class="btn btn-primary print" onClick="window.print();"><i class="fa fa-print" aria-hidden="true"></i> Imprimir</button></span></h1>
     <br>
     <?= $this->render('_form', [
         'model' => $model,
@@ -65,7 +65,8 @@ $this->params['breadcrumbs'][] = ['label' => 'Cursos', 'url' => ['index']];
 
         //desabilita todos os inputs
         $('.curso-view').find(':input').prop('disabled', true);
-
+        //habilita o botão imprimir
+        $(".print").prop("disabled", false);
         //remove todas as ações
         $('.header').remove();
         $('.acoes').remove();

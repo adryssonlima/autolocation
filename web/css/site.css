@@ -124,3 +124,7 @@ a.desc:after {
     padding: 7px;
     border-radius: 7px;
 }
+
+.table-horario {
+    width: 210px;
+}
