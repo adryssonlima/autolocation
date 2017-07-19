@@ -10,74 +10,34 @@ $this->title = 'Auto Location';
 ?>
 <div class="site-index">
 
-	<h1>Painel de Turmas</h1>
-
+	<h1><i class="fa fa-table" aria-hidden="true"></i> Painel de Turmas <span class="pull-right"><button class="btn btn-primary print" onclick="toggleFullScreen(document.getElementById('table-painel'))"><i class="fa fa-desktop" aria-hidden="true"></i> Modo de Exibição</button></span></h1>
+    <br>
     <div class="container painel">
-    <!--    <article> -->
-            <div class="table-clientes">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th  style="color:white; width: 300px;"><i class="fa fa-university"></i> Curso</th>
-                            <th  style="color:white; width: 300px;"><i class="fa fa-graduation-cap"></i> Turma</th>
-                            <th  style="color:white; width: 300px;"><i class="fa fa-book"></i> Disciplina</th>
-                            <th  style="color:white; width: 300px;"><i class="fa fa-location-arrow"></i> Sala</th>
-                            <th  style="color:white; width: 300px;"><i class="fa fa-clock-o"></i> Horário</th>
-                        </tr>
-                    </thead>
+        <div class="table-clientes">
+            <table id="table-painel" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="table-title"><i class="fa fa-university"></i> CURSO</th>
+                        <th class="table-title"><i class="fa fa-graduation-cap"></i> TURMA</th>
+                        <th class="table-title"><i class="fa fa-book"></i> DISCIPLINA</th>
+                        <th class="table-title"><i class="fa fa-location-arrow"></i> SALA</th>
+                        <th class="table-title"><i class="fa fa-clock-o"></i> HORÁRIO</th>
+                    </tr>
+                </thead>
 
-                    <tbody>
-                        <tr>
-                            <td class="first_colum" rowspan="2">Análise e Desenvolvimento de Sistemas</td>
-                            <td class="second_colum"><span class="label label-primary">ADS 2017.2</span></td>
-                            <td class="last_colum">Implementação de Banco de Dados</td>
-                            <td class="second_colum">PGB F02</td>
-                            <td class="last_colum">A-B 7:30 às 9:20</td>
-                        </tr>
-						<tr>
-						    <td class="second_colum"><span class="label label-primary">ADS 2016.1</span></td>
-						    <td class="last_colum">Introdução a Programação</td>
-						    <td class="second_colum">PGB F01</td>
-							<td class="last_colum">A-B 7:30 às 9:20</td>
-						</tr>
-                        <tr>
-                            <td class="first_colum">Administração</td>
-                            <td class="second_colum"><span class="label label-primary">ADM 2017.2</span></td>
-                            <td class="last_colum">Teoria Geral da Administração I</td>
-                            <td class="second_colum">PGB F05</td>
-                            <td class="last_colum">C-D 9:30 às 11:00</td>
-                        </tr>
-                        <tr>
-                            <td class="first_colum">Redes de Computadores</td>
-                            <td class="second_colum"><span class="label label-primary">REDES 2017.2</span></td>
-                            <td class="last_colum">Inglês Técnico</td>
-                            <td class="second_colum">PGB E05</td>
-                            <td class="last_colum">A-B 7:30 às 9:20</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
- <!--       </article> -->
-    </div>
-
-
-
-
-
-<!--
-
-    <div class="row" id="cards">
-        <div class="col-sm-3" v-for="(item,index) in turmas">
-            <div class="panel panel-info" style="border-style: solid; border-width: 3px;">
-                <div class="panel-heading"><b style="font-size: 170%">{{item.turma}}</b></div>
-                <div class="panel-body">
-                    <p><b>{{item.disciplina}}</b></p>
-                    <p><b>{{item.sala}}</b></p>
-                </div>
-            </div>
+                <tbody id="tbody">
+                    <tr v-for="(item,index) in turmas">
+                        <td class="td-label">{{item.curso}}</td>
+                        <td class="td-label"><span class="label label-primary">{{item.turma}}</span></td>
+                        <td class="td-label">{{item.disciplina}}</td>
+                        <td class="td-label">{{item.sala}}</td>
+                        <td class="td-label">{{item.horario}}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
--->
+
 </div>
 
 <script src="<?= Yii::$app->request->baseUrl ?>/web/js/socket.io-1.4.5.js"></script>
@@ -85,18 +45,63 @@ $this->title = 'Auto Location';
     $(function () {
         var socket = io.connect('http://127.0.0.1:3000');
         socket.on('listagem de turmas', function(turmas){
-            console.log(turmas);
-            new Vue({
-                el: '#cards',
-                data: {
-                    turmas
-                }
-            });
+            if (!turmas.length) {
+                $('#tbody').html('<tr class="aviso"><td>Sem aulas no momento.</td></tr>');
+            } else {
+                $('.aviso').remove();
+                console.log(turmas);
+                new Vue({
+                    el: '#tbody',
+                    data: {
+                        turmas
+                    }
+                });
+            }
+            
         });
     });
+
+    function toggleFullScreen(elem) {
+        // ## The below if statement seems to work better ## if ((document.fullScreenElement && document.fullScreenElement !== null) || (document.msfullscreenElement && document.msfullscreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
+        if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) || (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) || (document.mozFullScreen !== undefined && !document.mozFullScreen) || (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {
+            if (elem.requestFullScreen) {
+                elem.requestFullScreen();
+            } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullScreen) {
+                elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        } else {
+            if (document.cancelFullScreen) {
+                document.cancelFullScreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.webkitCancelFullScreen) {
+                document.webkitCancelFullScreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+    }
+
 </script>
 
 <style>
+
+html, body {
+  background: white;
+  padding: 0;
+  margin: 0;
+}
+
+*:fullscreen
+*:-ms-fullscreen,
+*:-webkit-full-screen,
+*:-moz-full-screen {
+   overflow: auto !important;
+}
 
 div.painel {
     margin: 0;
@@ -124,5 +129,12 @@ tr {
     border-color: inherit;
 }
 
+.table-title {
+    color: white;
+}
+
+.td-label {
+    font-size: 130%;
+}
 
 </style>
