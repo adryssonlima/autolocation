@@ -12,7 +12,7 @@ use Yii;
  * @property integer $curso
  * @property integer $semestre
  * @property string $turno
- *
+ * @property string last_update
  * @property Horario[] $horarios
  * @property Curso $curso0
  */
@@ -52,6 +52,7 @@ class Turma extends \yii\db\ActiveRecord
             'curso' => 'Curso',
             'semestre' => 'Semestre Atual da Turma',
             'turno' => 'Turno',
+            'last_update' => 'Última Modificação',
         ];
     }
 

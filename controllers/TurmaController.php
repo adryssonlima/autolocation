@@ -15,6 +15,7 @@ use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
+date_default_timezone_set('America/Fortaleza');
 /**
  * TurmaController implements the CRUD actions for Turma model.
  */
@@ -117,6 +118,7 @@ class TurmaController extends Controller
         $model->curso = $data['curso'];
         $model->semestre = $data['semestre'];
         $model->turno = $data['turno'];
+        $model->last_update = date('Y-m-d');
         if ($model->save()) {
             if ($this->createHorarios($model->id, $data['horarios']) >= 1) {
                 return $this->redirect(['index']);
@@ -221,6 +223,7 @@ class TurmaController extends Controller
         $model = $this->findModel($data['id']);
         $model->identificador = $data['identificador'];
         $model->semestre = $data['semestre'];
+        $model->last_update = date('Y-m-d');
         if ($model->save()) {
             $delete = Yii::$app->db->createCommand()
                         ->delete('cronograma.horario', ['turma' => $model->id])

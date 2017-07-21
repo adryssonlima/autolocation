@@ -6,7 +6,7 @@ use yii\web\View;
 
 /* @var $this View */
 
-$this->title = 'Auto Location';
+$this->title = 'Class Location';
 ?>
 <div class="site-index">
 
