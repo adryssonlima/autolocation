@@ -20,11 +20,11 @@ AppAsset::register($this);
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="<?= Yii::$app->request->baseUrl ?>/web/js/jquery-3.1.1.min.js"></script>
-    <script src="<?= Yii::$app->request->baseUrl ?>/web/js/functions.js"></script>
-    <script src="<?= Yii::$app->request->baseUrl ?>/web/js/vue.min.js"></script>
-    <link rel="stylesheet" href="<?= Yii::$app->request->baseUrl ?>/web/css/style-wizard-circular.css">
-    <link rel="stylesheet" href="<?= Yii::$app->request->baseUrl ?>/web/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--    <script src="<?= Yii::$app->request->baseUrl ?>/web/js/jquery-3.1.1.min.js"></script> -->
+<!--    <script src="<?= Yii::$app->request->baseUrl ?>/web/js/functions.js"></script> -->
+<!--    <script src="<?= Yii::$app->request->baseUrl ?>/web/js/vue.min.js"></script> -->
+<!--    <link rel="stylesheet" href="<?= Yii::$app->request->baseUrl ?>/web/css/style-wizard-circular.css"> -->
+<!--    <link rel="stylesheet" href="<?= Yii::$app->request->baseUrl ?>/web/font-awesome-4.7.0/css/font-awesome.min.css"> -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
